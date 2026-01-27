@@ -4,364 +4,353 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KPRCAS Hall Ticket</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
   <style>
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
+    /* --- RESET & BASICS --- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      color: #333;
     }
 
-    body{
-      font-family:'Roboto',sans-serif;
-      background:#f4f4f4;
-      padding:20px;
+    /* --- LOADER --- */
+    #loader-overlay {
+      position: fixed; inset: 0; background: #fff;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 9999;
     }
-
-    /* ---------------- LOADER ---------------- */
-    #loader-overlay{
-      position:fixed;
-      inset:0;
-      background:#fff;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
+    .spinner {
+      width: 48px; height: 48px;
+      border: 5px solid #eee; border-top: 5px solid #28a745;
+      border-radius: 50%; animation: spin 1s linear infinite;
+      margin-bottom: 15px;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .spinner{
-      width:48px;
-      height:48px;
-      border:5px solid #eee;
-      border-top:5px solid #28a745;
-      border-radius:50%;
-      animation:spin 1s linear infinite;
-      margin-bottom:15px;
+    /* --- SEARCH CONTAINER --- */
+    .search-container {
+      max-width: 420px; margin: 40px auto;
+      background: #fff; padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      text-align: center;
     }
-
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* ---------------- SEARCH PANEL ---------------- */
-    .search-container{
-      max-width:420px;
-      margin:40px auto;
-      background:#fff;
-      padding:30px;
-      border-radius:8px;
-      box-shadow:0 4px 14px rgba(0,0,0,.1);
-      text-align:center;
+    .logo-img { height: 100px; margin-bottom: 15px; max-width: 100%; object-fit: contain; }
+    .instruction-text { font-weight: 600; margin-bottom: 15px; }
+    .input-box {
+      width: 100%; padding: 12px; font-size: 16px;
+      border: 2px solid #ccc; border-radius: 4px;
+      margin-bottom: 15px; text-transform: uppercase;
     }
-
-    .logo-img{
-      height:120px;
-      margin-bottom:15px;
+    .input-box:focus { outline: none; border-color: #28a745; }
+    .view-btn {
+      width: 100%; padding: 12px; font-size: 16px;
+      background: #28a745; color: #fff; border: none;
+      border-radius: 4px; font-weight: 600; cursor: pointer;
+      transition: background 0.3s;
     }
+    .view-btn:hover { background: #218838; }
+    .footer-text { margin-top: 20px; font-size: 14px; font-weight: 600; color: #666; }
 
-    .instruction-text{
-      font-weight:600;
-      margin-bottom:15px;
-    }
-
-    .input-box{
-      width:100%;
-      padding:12px;
-      font-size:15px;
-      border:2px solid #ccc;
-      border-radius:4px;
-      margin-bottom:15px;
-      text-transform:uppercase;
-    }
-
-    .input-box:focus{
-      outline:none;
-      border-color:#28a745;
-    }
-
-    .view-btn{
-      width:100%;
-      padding:12px;
-      font-size:15px;
-      background:#28a745;
-      color:#fff;
-      border:none;
-      border-radius:4px;
-      font-weight:600;
-      cursor:pointer;
-    }
-
-    .footer-text{
-      margin-top:20px;
-      font-size:14px;
-      font-weight:600;
-    }
-
-    /* ---------------- HALL TICKET ---------------- */
-    .hall-ticket{
-      display:none;
-      width:210mm;
-      min-height:297mm;
-      margin:20px auto;
-      background:#fff;
-      padding:15mm;
-      border:2px solid #000;
+    /* --- HALL TICKET CONTAINER --- */
+    .hall-ticket {
+      display: none;
+      width: 210mm; /* A4 width */
+      max-width: 100%;
+      min-height: 297mm; /* A4 height */
+      margin: 40px auto;
+      background: #fff;
+      padding: 10mm;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      position: relative;
     }
 
     /* Header */
-    .ticket-header{
-      display:grid;
-      grid-template-columns:90px 1fr;
-      gap:15px;
-      align-items:center;
-      border-bottom:2px solid #000;
-      padding-bottom:10px;
-      margin-bottom:15px;
+    .ticket-header {
+      display: flex; align-items: center; gap: 15px;
+      border-bottom: 2px solid #000; padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .ticket-logo { width: 80px; height: auto; }
+    .ticket-header-text h1 { font-size: 18px; font-weight: 700; line-height: 1.2; }
+    .ticket-header-text h2 { font-size: 14px; font-weight: 500; margin-top: 4px; }
+    .hall-ticket-label {
+      font-size: 16px; font-weight: 700;
+      background: #000; color: #fff;
+      display: inline-block; padding: 4px 8px;
+      margin-top: 8px; border-radius: 2px;
     }
 
-    .ticket-logo{
-      width:90px;
+    /* Student Info Grid */
+    .student-info {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 15px; border: 1px solid #ccc; padding: 15px;
+      margin-bottom: 20px; background: #fafafa;
     }
+    .info-row { display: flex; flex-direction: column; }
+    .info-row .label { font-size: 11px; font-weight: 700; color: #666; text-transform: uppercase; margin-bottom: 2px; }
+    .info-row .value { font-size: 14px; font-weight: 600; color: #000; word-wrap: break-word; }
 
-    .ticket-header-text h1{
-      font-size:20px;
-      font-weight:700;
+    /* Exam Table */
+    .table-wrapper { width: 100%; overflow-x: auto; margin-bottom: 20px; }
+    table {
+      width: 100%; border-collapse: collapse;
+      border: 1px solid #000; font-size: 12px;
     }
-
-    .ticket-header-text h2{
-      font-size:13px;
-      font-weight:500;
-    }
-
-    .hall-ticket-label{
-      font-size:16px;
-      font-weight:700;
-      margin-top:6px;
-    }
-
-    /* Student Info */
-    .student-info{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-      border:1px solid #ccc;
-      padding:10px;
-      margin-bottom:12px;
-    }
-
-    .info-row .label{
-      font-size:11px;
-      font-weight:700;
-      color:#555;
-    }
-
-    .info-row .value{
-      font-size:14px;
-      font-weight:600;
-    }
-
-    /* Table */
-    table{
-      width:100%;
-      border-collapse:collapse;
-      border:1px solid #000;
-      font-size:12px;
-    }
-
-    th{
-      background:#000;
-      color:#fff;
-      padding:6px;
-    }
-
-    td{
-      padding:6px;
-      border:1px solid #ccc;
-    }
-
-    .text-center{text-align:center}
-    .font-bold{font-weight:700}
+    th { background: #000; color: #fff; padding: 8px; text-align: left; white-space: nowrap; }
+    td { padding: 8px; border: 1px solid #ccc; vertical-align: middle; }
+    .text-center { text-align: center; }
+    .font-bold { font-weight: 700; }
 
     /* Instructions */
-    .instructions{
-      margin-top:10px;
-      border:1px solid #ccc;
-      padding:10px;
-      font-size:12px;
+    .instructions {
+      border: 1px solid #ccc; padding: 15px;
+      font-size: 12px; line-height: 1.6;
+      background: #fafafa;
+    }
+    .instructions strong { display: block; margin-bottom: 5px; font-size: 14px; text-transform: uppercase; }
+    .instructions ul { padding-left: 20px; margin: 0; }
+
+    /* Print Actions */
+    .print-actions { text-align: center; margin-top: 30px; margin-bottom: 50px; }
+    .print-btn {
+      padding: 12px 30px; background: #007bff; color: #fff;
+      border: none; border-radius: 50px; font-weight: 600;
+      cursor: pointer; box-shadow: 0 4px 6px rgba(0,123,255,0.3);
+      transition: transform 0.2s;
+    }
+    .print-btn:hover { transform: translateY(-2px); background: #0056b3; }
+
+    /* --- MOBILE RESPONSIVENESS (Screen Only) --- */
+    @media only screen and (max-width: 600px) {
+      body { padding: 10px; }
+      .search-container { margin: 20px auto; padding: 20px; }
+
+      /* Reform Hall Ticket for Mobile View */
+      .hall-ticket {
+        width: 100%; padding: 15px;
+        min-height: auto; margin: 20px 0;
+      }
+      .ticket-header { flex-direction: column; text-align: center; }
+      .ticket-header-text h1 { font-size: 16px; }
+
+      /* Stack Student Info Vertical */
+      .student-info { grid-template-columns: 1fr; gap: 10px; padding: 10px; }
+      .info-row { flex-direction: row; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+      .info-row:last-child { border-bottom: none; }
+      .info-row .label { width: 40%; }
+      .info-row .value { width: 60%; text-align: right; }
+
+      /* Table Scroll */
+      th, td { padding: 6px; font-size: 11px; }
     }
 
-    .instructions strong{
-      font-size:13px;
-    }
-
-    /* Print Button */
-    .print-actions{
-      text-align:center;
-      margin-top:10px;
-    }
-
-    .print-btn{
-      padding:10px 26px;
-      background:#28a745;
-      color:#fff;
-      border:none;
-      font-weight:600;
-      cursor:pointer;
-    }
-
-    /* ---------------- PRINT LOCK ---------------- */
-    @media print{
-      @page{
-        size:A4;
-        margin:10mm;
+    /* --- PRINT OPTIMIZATION (PDF Generation) --- */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+      body {
+        margin: 0; padding: 0;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
       }
 
-      body{padding:0;background:#fff}
-
+      /* Hide Non-Printable Elements */
+      #loader-overlay,
       .search-container,
-      .print-actions,
-      #loader-overlay{
-        display:none !important;
+      .print-actions {
+        display: none !important;
       }
 
-      .hall-ticket{
-        display:block !important;
-        page-break-inside:avoid;
-        overflow:hidden;
+      /* Hall Ticket Full Page */
+      .hall-ticket {
+        display: block !important;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        page-break-inside: avoid;
       }
 
-      table,
-      .instructions,
-      .student-info{
-        page-break-inside:avoid;
+      /* Ensure Grid Prints Correctly */
+      .student-info {
+        grid-template-columns: repeat(3, 1fr); /* Force 3 columns on PDF even if saved from mobile */
+        background: #fff; /* Remove gray bg for saving ink */
+        border: 1px solid #000;
       }
+      .info-row { display: block; border: none; text-align: left; }
+      .info-row .label { width: auto; }
+      .info-row .value { width: auto; text-align: left; }
+
+      /* Table Cleanup */
+      .table-wrapper { overflow: visible; }
+      table { width: 100%; border: 2px solid #000; }
+      th { background-color: #eee !important; color: #000 !important; font-weight: bold; border: 1px solid #000; }
+      td { border: 1px solid #000; }
     }
   </style>
 </head>
-
 <body>
 
 <div id="loader-overlay">
   <div class="spinner"></div>
-  <div>Loading Hall Ticket...</div>
+  <p>Loading Database...</p>
 </div>
 
 <div class="search-container">
-  <img src="https://i.postimg.cc/65mw4TVL/KPR-Color.png" class="logo-img">
+  <img src="https://i.postimg.cc/65mw4TVL/KPR-Color.png" class="logo-img" alt="Logo">
   <div class="instruction-text">Type your Register Number and Click 'View Hall Ticket'.</div>
-  <input id="regno" class="input-box" disabled>
+  <input type="text" id="regno" class="input-box" placeholder="e.g., 23CA001" disabled>
   <button class="view-btn" id="btn" onclick="searchHT()" disabled>View Hall Ticket</button>
-  <div class="footer-text">CIA-1 FEB 2026</div>
+  <div class="footer-text">CIA-1 EXAMINATIONS FEB 2026</div>
 </div>
 
 <div class="hall-ticket" id="ticketBox">
-
   <div class="ticket-header">
-    <img src="https://i.postimg.cc/65mw4TVL/KPR-Color.png" class="ticket-logo">
+    <img src="https://i.postimg.cc/65mw4TVL/KPR-Color.png" class="ticket-logo" alt="Logo">
     <div class="ticket-header-text">
       <h1>KPR College of Arts Science and Research</h1>
       <h2>CIA-1 Examinations – Feb 2026</h2>
-      <div class="hall-ticket-label">HALL TICKET</div>
+      <span class="hall-ticket-label">HALL TICKET</span>
     </div>
   </div>
 
   <div class="student-info">
-    <div class="info-row"><div class="label">Name</div><div class="value" id="name"></div></div>
-    <div class="info-row"><div class="label">Register No</div><div class="value" id="reg"></div></div>
-    <div class="info-row"><div class="label">Course</div><div class="value" id="course"></div></div>
-    <div class="info-row"><div class="label">Department</div><div class="value" id="dept"></div></div>
-    <div class="info-row"><div class="label">Year / Sem</div><div class="value" id="yearsem"></div></div>
+    <div class="info-row"><span class="label">Name</span><span class="value" id="name"></span></div>
+    <div class="info-row"><span class="label">Register No</span><span class="value" id="reg"></span></div>
+    <div class="info-row"><span class="label">Course</span><span class="value" id="course"></span></div>
+    <div class="info-row"><span class="label">Department</span><span class="value" id="dept"></span></div>
+    <div class="info-row"><span class="label">Year / Semester</span><span class="value" id="yearsem"></span></div>
   </div>
 
-  <table>
-    <thead>
-    <tr>
-      <th>Date</th>
-      <th>Session</th>
-      <th>Code</th>
-      <th>Subject</th>
-      <th>Venue</th>
-    </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-  </table>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+      <tr>
+        <th>Date</th>
+        <th>Session</th>
+        <th>Subject Code</th>
+        <th>Subject Name</th>
+        <th>Venue</th>
+      </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
 
   <div class="instructions">
-    <strong>Instructions</strong>
+    <strong>Examination Instructions</strong>
     <ul>
-      <li>Carry hall ticket and ID card</li>
-      <li>Be present 15 minutes early</li>
-      <li>No electronic devices allowed</li>
+      <li>Candidates must College ID card.</li>
+      <li>Report to the examination hall at least 15 minutes before the scheduled time.</li>
+      <li>Electronic gadgets (phones, smartwatches) are strictly prohibited.</li>
+      <li>Malpractice of any kind will be viewed seriously.</li>
     </ul>
   </div>
 
   <div class="print-actions">
-    <button class="print-btn" onclick="window.print()">Print / Download PDF</button>
+    <button class="print-btn" onclick="window.print()">Print</button>
   </div>
-
 </div>
 
 <script>
-  // Replace the existing <script> with this
+  // Google Sheets CSV Export Link
   const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNN-aweHGorS3xF5LAZE7caqrkN4Ur5CMBHSrE_4qGQdLw9ekNBm8fvTCU2lZ8WcP9a6m-tY1T1zsy/pub?gid=1191861589&single=true&output=csv";
-  const map = new Map();
 
-  // Cache DOM elements (avoid hyphenated identifier issues)
-  const loaderOverlay = document.getElementById('loader-overlay');
-  const regnoEl = document.getElementById('regno');
-  const btnEl = document.getElementById('btn');
-  const nameEl = document.getElementById('name');
-  const regEl = document.getElementById('reg');
-  const deptEl = document.getElementById('dept');
-  const yearsemEl = document.getElementById('yearsem');
-  const courseEl = document.getElementById('course');
-  const tbodyEl = document.getElementById('tbody');
-  const ticketBoxEl = document.getElementById('ticketBox');
+  const dataMap = new Map();
+  const els = {
+    loader: document.getElementById('loader-overlay'),
+    regInput: document.getElementById('regno'),
+    btn: document.getElementById('btn'),
+    ticketBox: document.getElementById('ticketBox'),
+    name: document.getElementById('name'),
+    reg: document.getElementById('reg'),
+    dept: document.getElementById('dept'),
+    yearsem: document.getElementById('yearsem'),
+    course: document.getElementById('course'),
+    tbody: document.getElementById('tbody')
+  };
 
+  // Fetch Data
   fetch(SHEET_URL)
-          .then(r => r.text())
-          .then(t => {
-            t.split(/\r?\n/).slice(1).forEach(r => {
-              const c = r.split(",");
-              if (c[2]) map.set(c[2].replace(/"/g, "").trim().toUpperCase(), c);
+          .then(response => response.text())
+          .then(csvText => {
+            const rows = csvText.split(/\r?\n/).slice(1); // Skip header
+            rows.forEach(row => {
+              const cols = row.split(",");
+              if (cols[2]) {
+                const regNo = cols[2].replace(/"/g, "").trim().toUpperCase();
+                dataMap.set(regNo, cols);
+              }
             });
-            loaderOverlay.style.display = "none";
-            regnoEl.disabled = false;
-            btnEl.disabled = false;
+            els.loader.style.display = "none";
+            els.regInput.disabled = false;
+            els.btn.disabled = false;
+          })
+          .catch(err => {
+            console.error("Error loading sheet:", err);
+            els.loader.innerHTML = "<p style='color:red'>Error loading data. Refresh page.</p>";
           });
 
   function searchHT() {
-    const r = regnoEl.value.trim().toUpperCase();
-    if (!map.has(r)) { alert("Register Number Not Found"); return; }
-    const d = map.get(r);
+    const inputReg = els.regInput.value.trim().toUpperCase();
 
-    nameEl.innerText = d[1];
-    regEl.innerText = r;
-    deptEl.innerText = d[3];
-    yearsemEl.innerText = d[4] + " / " + d[5];
-    courseEl.innerText = d[6];
-
-    tbodyEl.innerHTML = "";
-    let i = 7;
-    for (let k = 0; k < 8; k++) {
-      if (d[i]) {
-        tbodyEl.innerHTML += `
-      <tr>
-        <td class="text-center">${d[i+2] || ""}</td>
-        <td class="text-center">${d[i+3] || ""}</td>
-        <td class="text-center font-bold">${d[i] || ""}</td>
-        <td>${d[i+1] || ""}</td>
-        <td class="text-center">${d[i+4] || ""}</td>
-      </tr>`;
-      }
-      i += 5;
+    if (!inputReg) {
+      alert("Please enter a Register Number.");
+      return;
     }
 
-    ticketBoxEl.style.display = "block";
-    ticketBoxEl.scrollIntoView({ behavior: "smooth" });
-  }
+    if (!dataMap.has(inputReg)) {
+      alert("Register Number Not Found or Invalid.");
+      return;
+    }
 
+    const data = dataMap.get(inputReg);
+
+    els.name.innerText = data[1] || "-";
+    els.reg.innerText = inputReg;
+    els.dept.innerText = data[3] || "-";
+    els.yearsem.innerText = (data[4] || "") + " / " + (data[5] || "");
+    els.course.innerText = data[6] || "-";
+
+    els.tbody.innerHTML = "";
+    let startIndex = 7;
+    const maxSubjects = 8;
+
+    for (let k = 0; k < maxSubjects; k++) {
+      if (data[startIndex]) {
+        const date = data[startIndex + 2] || "";
+        const session = data[startIndex + 3] || "";
+        const subCode = data[startIndex] || "";
+        const subName = data[startIndex + 1] || "";
+        const venue = data[startIndex + 4] || "";
+
+        const rowHTML = `
+          <tr>
+            <td class="text-center">${date}</td>
+            <td class="text-center">${session}</td>
+            <td class="text-center font-bold">${subCode}</td>
+            <td>${subName}</td>
+            <td class="text-center">${venue}</td>
+          </tr>
+        `;
+        els.tbody.innerHTML += rowHTML;
+      }
+      startIndex += 5;
+    }
+
+    els.ticketBox.style.display = "block";
+    setTimeout(() => {
+      els.ticketBox.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  }
 </script>
 
 </body>
