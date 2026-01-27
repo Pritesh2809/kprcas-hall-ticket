@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPRCAS Hall Ticket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #002e5b;
+            --accent: #fdc800;
+            --text: #222;
+            --muted: #666;
+            --border: #000;
+            --radius: 6px;
+        }
+
+        /* ---------------- RESET ---------------- */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 32px;
+            background: #eef2f5;
+            color: var(--text);
+        }
+
+        /* ---------------- LOADER ---------------- */
+        #loader-overlay {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid #eee;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        .loading-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ---------------- SEARCH PANEL ---------------- */
+        .search-container {
+            max-width: 560px;
+            margin: 0 auto 32px;
+            background: #fff;
+            padding: 28px 32px;
+            border-radius: 10px;
+            box-shadow: 0 12px 30px rgba(0,0,0,.08);
+            text-align: center;
+        }
+
+        .portal-title {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px 14px;
+            font-size: 15px;
+            border: 1.8px solid #ccc;
+            border-radius: var(--radius);
+            text-transform: uppercase;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        button {
+            padding: 12px 22px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #001a35;
+        }
+
+        /* ---------------- HALL TICKET ---------------- */
+        .hall-ticket {
+            display: none;
+            max-width: 210mm;
+            margin: auto;
+            background: #fff;
+            padding: 36px;
+            border: 1.5px solid #ccc;
+        }
+
+        /* Header */
+        .header {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 20px;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .logo {
+            width: 100px;
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .header-text h2 {
+            margin: 6px 0 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        /* ---------------- STUDENT INFO ---------------- */
+        .student-info {
+            margin-top: 28px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: #fafafa;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px 28px;
+        }
+
+        .info-row .label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .info-row .value {
+            font-size: 17px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        /* ---------------- TABLE ---------------- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 28px;
+        }
+
+        th {
+            background: var(--primary);
+            color: #fff;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid var(--border);
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 12px;
+            font-size: 14.5px;
+            border: 1px solid var(--border);
+        }
+
+        tr:nth-child(even) {
+            background: #f3f3f3;
+        }
+
+        /* ---------------- ACTIONS ---------------- */
+        .print-actions {
+            margin-top: 28px;
+            text-align: center;
+        }
+
+        .print-btn {
+            background: #27ae60;
+            font-size: 16px;
+            padding: 12px 26px;
+        }
+
+        /* ---------------- PRINT ---------------- */
+        @media print {
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+
+            body {
+                background: #fff;
+                padding: 0;
+            }
+
+            .search-container,
+            .print-actions,
+            #loader-overlay {
+                display: none !important;
+            }
+
+            .hall-ticket {
+                display: block !important;
+                width: 100%;
+                border: 2px solid var(--primary);
+                padding: 24px;
+            }
+
+            th, td {
+                font-size: 15px;
+                padding: 10px;
+            }
+
+            .info-row .value {
+                font-size: 18px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="loader-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Connecting to KPR Database...</div>
+</div>
+
+<div class="search-container">
+    <h2 class="portal-title">Hall Ticket Download</h2>
+
+    <div class="input-group">
+        <input type="text" id="regno" placeholder="Enter Register No." disabled>
+        <button id="btn" onclick="searchHT()" disabled>View Ticket</button>
+    </div>
+</div>
+
+<div class="hall-ticket" id="ticketBox">
+
+    <div class="header">
+        <img src="https://i.postimg.cc/65mw4TVL/KPR-Color.png" alt="Logo" class="logo">
+        <div class="header-text">
+            <h1>KPR College of Arts Science and Research</h1>
+            <h2>End Semester Examinations - Nov/Dec 2025</h2>
+            <h2 style="color: var(--primary-color); font-weight:bold; margin-top:10px;">HALL TICKET</h2>
+        </div>
+    </div>
+
+    <div class="student-info">
+        <div class="info-row">
+            <span class="label">Candidate Name</span>
+            <span class="value" id="name"></span>
+        </div>
+        <div class="info-row">
+            <span class="label">Register Number</span>
+            <span class="value" id="reg"></span>
+        </div>
+        <div class="info-row">
+            <span class="label">Degree & Branch</span>
+            <span class="value" id="course"></span>
+        </div>
+        <div class="info-row">
+            <span class="label">Department</span>
+            <span class="value" id="dept"></span>
+        </div>
+        <div class="info-row">
+            <span class="label">Year / Semester</span>
+            <span class="value" id="yearsem"></span>
+        </div>
+    </div>
+
+    <table id="examTable">
+        <thead>
+        <tr>
+            <th width="15%">Date</th>
+            <th width="10%">Session</th>
+            <th width="15%">Sub. Code</th>
+            <th>Subject Name</th>
+            <th width="15%">Venue</th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+
+    <div class="print-actions">
+        <button class="print-btn" onclick="window.print()">Print Hall Ticket</button>
+    </div>
+
+</div>
+
+<script>
+    /* ================= CONFIG ================= */
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNN-aweHGorS3xF5LAZE7caqrkN4Ur5CMBHSrE_4qGQdLw9ekNBm8fvTCU2lZ8WcP9a6m-tY1T1zsy/pub?gid=1191861589&single=true&output=csv";
+    /* ========================================== */
+
+    const studentMap = new Map();
+
+    async function loadData() {
+        try {
+            const res = await fetch(SHEET_URL);
+            const text = await res.text();
+            const rows = text.split(/\r?\n/);
+
+            for (let i = 1; i < rows.length; i++) {
+                if (!rows[i]) continue;
+                const cols = rows[i].split(",");
+                // RegNo at index 2
+                const reg = cols[2]?.replace(/"/g, "").trim().toUpperCase();
+                if (reg) studentMap.set(reg, cols);
+            }
+
+            // DATA LOADED: Hide Overlay & Enable Inputs
+            const overlay = document.getElementById("loader-overlay");
+            overlay.style.opacity = "0";
+            setTimeout(() => { overlay.style.display = "none"; }, 500);
+
+            document.getElementById("regno").disabled = false;
+            document.getElementById("btn").disabled = false;
+
+        } catch (e) {
+            document.querySelector(".loading-text").innerText = "Error: Could not load database.";
+            document.querySelector(".loading-text").style.color = "red";
+        }
+    }
+
+    // Call load function
+    loadData();
+
+    function searchHT() {
+        const regInput = document.getElementById("regno").value.trim().toUpperCase();
+        if (!regInput) return alert("Enter Register Number");
+
+        const row = studentMap.get(regInput);
+        if (!row) return alert("Register Number Not Found");
+
+        // Fill Details
+        document.getElementById("name").innerText = row[1];
+        document.getElementById("reg").innerText = regInput;
+        document.getElementById("dept").innerText = row[3];
+        document.getElementById("yearsem").innerText = row[4] + " / " + row[5];
+        document.getElementById("course").innerText = row[6];
+
+        // Fill Table
+        const tbody = document.getElementById("tbody");
+        tbody.innerHTML = "";
+
+        let base = 7;
+        let found = false;
+
+        for (let i = 0; i < 8; i++) {
+            if (row[base] && row[base].trim() !== "") {
+                found = true;
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="text-align:center">${row[base+2]}</td>
+                        <td style="text-align:center">${row[base+3]}</td>
+                        <td style="text-align:center; font-weight:bold;">${row[base]}</td>
+                        <td>${row[base+1]}</td>
+                        <td style="text-align:center">${row[base+4]}</td>
+                    </tr>
+                `;
+            }
+            base += 5;
+        }
+
+        if(!found) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px;">No exams found.</td></tr>`;
+
+        // Show Ticket
+        document.getElementById("ticketBox").style.display = "block";
+
+        // Use scroll for better UX on mobile/desktop
+        document.getElementById("ticketBox").scrollIntoView({behavior: "smooth"});
+    }
+
+    // Trigger search on Enter key
+    document.getElementById("regno").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") searchHT();
+    });
+
+</script>
+
+</body>
+</html>
