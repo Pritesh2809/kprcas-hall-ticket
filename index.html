@@ -8,99 +8,115 @@
 
     <style>
         :root {
-            --primary: #002e5b;
+            --primary: #1a427e;
             --accent: #fdc800;
             --text: #222;
             --muted: #666;
-            --border: #000;
-            --radius: 6px;
+            --border: #ddd;
+            --radius: 8px;
         }
 
-        /* ---------------- RESET ---------------- */
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 32px;
-            background: #eef2f5;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #009746 0%, #1a427e 100%);
             color: var(--text);
+            min-height: 100vh;
         }
 
-        /* ---------------- LOADER ---------------- */
         #loader-overlay {
             position: fixed;
             inset: 0;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.98);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
+            transition: opacity 0.5s ease;
         }
 
         .spinner {
-            width: 44px;
-            height: 44px;
-            border: 4px solid #eee;
-            border-top: 4px solid var(--primary);
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .loading-text {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 500;
             color: var(--primary);
+            letter-spacing: 0.5px;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        /* ---------------- SEARCH PANEL ---------------- */
         .search-container {
-            max-width: 560px;
-            margin: 0 auto 32px;
+            max-width: 600px;
+            margin: 0 auto 40px;
             background: #fff;
-            padding: 28px 32px;
-            border-radius: 10px;
-            box-shadow: 0 12px 30px rgba(0,0,0,.08);
-            text-align: center;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         .portal-title {
-            margin: 0;
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 700;
             color: var(--primary);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .portal-subtitle {
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 30px;
         }
 
         .input-group {
             display: flex;
             gap: 12px;
-            margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         input {
             flex: 1;
-            padding: 12px 14px;
+            min-width: 200px;
+            padding: 14px 16px;
             font-size: 15px;
-            border: 1.8px solid #ccc;
+            border: 2px solid #e0e0e0;
             border-radius: var(--radius);
             text-transform: uppercase;
+            transition: all 0.3s ease;
         }
 
         input:focus {
             border-color: var(--primary);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 46, 91, 0.1);
+        }
+
+        input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
         }
 
         button {
-            padding: 12px 22px;
+            padding: 14px 28px;
             background: var(--primary);
             color: #fff;
             border: none;
@@ -108,121 +124,265 @@
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
-        button:hover {
-            background: #001a35;
+        button:hover:not(:disabled) {
+            background: #009746;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 46, 91, 0.3);
         }
 
-        /* ---------------- HALL TICKET ---------------- */
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
         .hall-ticket {
             display: none;
             max-width: 210mm;
-            margin: auto;
+            margin: 0 auto;
             background: #fff;
-            padding: 36px;
-            border: 1.5px solid #ccc;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
-        /* Header */
         .header {
             display: grid;
-            grid-template-columns: 100px 1fr;
-            gap: 20px;
+            grid-template-columns: 110px 1fr;
+            gap: 24px;
             align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 3px solid var(--primary);
+            padding-bottom: 24px;
+            border-bottom: 4px solid var(--primary);
+            margin-bottom: 32px;
         }
 
         .logo {
-            width: 100px;
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+        }
+
+        .header-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .header-text h1 {
-            margin: 0;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 700;
             color: var(--primary);
             text-transform: uppercase;
+            line-height: 1.3;
+            margin-bottom: 8px;
         }
 
         .header-text h2 {
-            margin: 6px 0 0;
             font-size: 16px;
             font-weight: 500;
-            color: #444;
+            color: #555;
+            margin-bottom: 4px;
         }
 
-        /* ---------------- STUDENT INFO ---------------- */
+        .header-text .hall-ticket-label {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 18px;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
         .student-info {
-            margin-top: 28px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            background: #fafafa;
+            padding: 24px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px 28px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .info-row {
+            display: flex;
+            flex-direction: column;
         }
 
         .info-row .label {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: var(--muted);
-            letter-spacing: .5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            margin-bottom: 4px;
-            display: block;
+            margin-bottom: 6px;
         }
 
         .info-row .value {
             font-size: 17px;
             font-weight: 600;
             color: #000;
+            line-height: 1.4;
         }
 
-        /* ---------------- TABLE ---------------- */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 32px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 28px;
+            border: 2px solid var(--primary);
+        }
+
+        thead {
+            background: var(--primary);
         }
 
         th {
-            background: var(--primary);
             color: #fff;
-            padding: 12px;
-            font-size: 14px;
-            border: 1px solid var(--border);
+            padding: 14px 12px;
+            font-size: 13px;
+            font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         td {
-            padding: 12px;
-            font-size: 14.5px;
+            padding: 14px 12px;
+            font-size: 14px;
             border: 1px solid var(--border);
+            vertical-align: middle;
         }
 
-        tr:nth-child(even) {
-            background: #f3f3f3;
+        tbody tr:nth-child(odd) {
+            background: #fff;
         }
 
-        /* ---------------- ACTIONS ---------------- */
-        .print-actions {
-            margin-top: 28px;
+        tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tbody tr:hover {
+            background: #e8f4f8;
+        }
+
+        .text-center {
             text-align: center;
         }
 
-        .print-btn {
-            background: #27ae60;
-            font-size: 16px;
-            padding: 12px 26px;
+        .font-bold {
+            font-weight: 700;
         }
 
-        /* ---------------- PRINT ---------------- */
+        .print-actions {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 2px dashed var(--border);
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            font-size: 16px;
+            padding: 14px 32px;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .print-btn:hover {
+            background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        .instructions {
+            margin-top: 24px;
+            padding: 20px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: var(--radius);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .instructions strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .instructions ul {
+            margin: 8px 0 0 20px;
+            padding: 0;
+        }
+
+        .instructions li {
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            .search-container {
+                padding: 30px 20px;
+            }
+
+            .hall-ticket {
+                padding: 24px 16px;
+            }
+
+            .header {
+                grid-template-columns: 80px 1fr;
+                gap: 16px;
+            }
+
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+
+            .header-text h1 {
+                font-size: 20px;
+            }
+
+            .header-text h2 {
+                font-size: 14px;
+            }
+
+            .student-info {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            input, button {
+                width: 100%;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+        }
+
         @media print {
             @page {
                 size: A4;
-                margin: 10mm;
+                margin: 12mm;
             }
 
             body {
@@ -232,24 +392,45 @@
 
             .search-container,
             .print-actions,
+            .instructions,
             #loader-overlay {
                 display: none !important;
             }
 
             .hall-ticket {
                 display: block !important;
-                width: 100%;
-                border: 2px solid var(--primary);
-                padding: 24px;
+                max-width: 100%;
+                box-shadow: none;
+                border: 3px solid var(--primary);
+                border-radius: 0;
+                padding: 20mm;
+                page-break-after: avoid;
+            }
+
+            .header {
+                margin-bottom: 20px;
+            }
+
+            .student-info {
+                margin-bottom: 20px;
+                page-break-inside: avoid;
+            }
+
+            table {
+                page-break-inside: avoid;
             }
 
             th, td {
-                font-size: 15px;
-                padding: 10px;
+                font-size: 13px;
+                padding: 10px 8px;
             }
 
             .info-row .value {
-                font-size: 18px;
+                font-size: 16px;
+            }
+
+            tbody tr:hover {
+                background: inherit;
             }
         }
     </style>
@@ -264,9 +445,10 @@
 
 <div class="search-container">
     <h2 class="portal-title">Hall Ticket Download</h2>
+    <p class="portal-subtitle">KPR College of Arts Science and Research</p>
 
     <div class="input-group">
-        <input type="text" id="regno" placeholder="Enter Register No." disabled>
+        <input type="text" id="regno" placeholder="Enter Register Number" disabled>
         <button id="btn" onclick="searchHT()" disabled>View Ticket</button>
     </div>
 </div>
@@ -274,11 +456,11 @@
 <div class="hall-ticket" id="ticketBox">
 
     <div class="header">
-        <img src="https://i.postimg.cc/65mw4TVL/KPR-Color.png" alt="Logo" class="logo">
+        <img src="https://i.postimg.cc/65mw4TVL/KPR-Color.png" alt="KPR Logo" class="logo">
         <div class="header-text">
             <h1>KPR College of Arts Science and Research</h1>
             <h2>End Semester Examinations - Nov/Dec 2025</h2>
-            <h2 style="color: var(--primary-color); font-weight:bold; margin-top:10px;">HALL TICKET</h2>
+            <h2 class="hall-ticket-label">HALL TICKET</h2>
         </div>
     </div>
 
@@ -305,19 +487,31 @@
         </div>
     </div>
 
-    <table id="examTable">
-        <thead>
-        <tr>
-            <th width="15%">Date</th>
-            <th width="10%">Session</th>
-            <th width="15%">Sub. Code</th>
-            <th>Subject Name</th>
-            <th width="15%">Venue</th>
-        </tr>
-        </thead>
-        <tbody id="tbody">
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table id="examTable">
+            <thead>
+            <tr>
+                <th width="15%">Date</th>
+                <th width="12%">Session</th>
+                <th width="15%">Subject Code</th>
+                <th>Subject Name</th>
+                <th width="15%">Venue</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="instructions">
+        <strong>Important Instructions:</strong>
+        <ul>
+            <li>Bring  ID card to the examination hall</li>
+            <li>Candidates must be present 15 minutes before the exam starts</li>
+            <li>Mobile phones and electronic devices are strictly prohibited</li>
+            <li>Follow all examination rules and guidelines</li>
+        </ul>
+    </div>
 
     <div class="print-actions">
         <button class="print-btn" onclick="window.print()">Print Hall Ticket</button>
@@ -326,58 +520,64 @@
 </div>
 
 <script>
-    /* ================= CONFIG ================= */
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNN-aweHGorS3xF5LAZE7caqrkN4Ur5CMBHSrE_4qGQdLw9ekNBm8fvTCU2lZ8WcP9a6m-tY1T1zsy/pub?gid=1191861589&single=true&output=csv";
-    /* ========================================== */
 
     const studentMap = new Map();
 
     async function loadData() {
         try {
             const res = await fetch(SHEET_URL);
+            if (!res.ok) throw new Error('Network response was not ok');
+
             const text = await res.text();
             const rows = text.split(/\r?\n/);
 
             for (let i = 1; i < rows.length; i++) {
-                if (!rows[i]) continue;
+                if (!rows[i].trim()) continue;
                 const cols = rows[i].split(",");
-                // RegNo at index 2
                 const reg = cols[2]?.replace(/"/g, "").trim().toUpperCase();
                 if (reg) studentMap.set(reg, cols);
             }
 
-            // DATA LOADED: Hide Overlay & Enable Inputs
             const overlay = document.getElementById("loader-overlay");
             overlay.style.opacity = "0";
-            setTimeout(() => { overlay.style.display = "none"; }, 500);
+            setTimeout(() => {
+                overlay.style.display = "none";
+            }, 500);
 
             document.getElementById("regno").disabled = false;
             document.getElementById("btn").disabled = false;
+            document.getElementById("regno").focus();
 
         } catch (e) {
-            document.querySelector(".loading-text").innerText = "Error: Could not load database.";
-            document.querySelector(".loading-text").style.color = "red";
+            console.error('Error loading data:', e);
+            document.querySelector(".loading-text").innerText = "Error: Could not load database. Please refresh.";
+            document.querySelector(".loading-text").style.color = "#e74c3c";
         }
     }
 
-    // Call load function
     loadData();
 
     function searchHT() {
         const regInput = document.getElementById("regno").value.trim().toUpperCase();
-        if (!regInput) return alert("Enter Register Number");
+
+        if (!regInput) {
+            alert("Please enter your Register Number");
+            return;
+        }
 
         const row = studentMap.get(regInput);
-        if (!row) return alert("Register Number Not Found");
+        if (!row) {
+            alert("Register Number Not Found. Please check and try again.");
+            return;
+        }
 
-        // Fill Details
-        document.getElementById("name").innerText = row[1];
+        document.getElementById("name").innerText = row[1] || "N/A";
         document.getElementById("reg").innerText = regInput;
-        document.getElementById("dept").innerText = row[3];
-        document.getElementById("yearsem").innerText = row[4] + " / " + row[5];
-        document.getElementById("course").innerText = row[6];
+        document.getElementById("dept").innerText = row[3] || "N/A";
+        document.getElementById("yearsem").innerText = (row[4] || "N/A") + " / " + (row[5] || "N/A");
+        document.getElementById("course").innerText = row[6] || "N/A";
 
-        // Fill Table
         const tbody = document.getElementById("tbody");
         tbody.innerHTML = "";
 
@@ -389,29 +589,41 @@
                 found = true;
                 tbody.innerHTML += `
                     <tr>
-                        <td style="text-align:center">${row[base+2]}</td>
-                        <td style="text-align:center">${row[base+3]}</td>
-                        <td style="text-align:center; font-weight:bold;">${row[base]}</td>
-                        <td>${row[base+1]}</td>
-                        <td style="text-align:center">${row[base+4]}</td>
+                        <td class="text-center">${row[base+2] || "-"}</td>
+                        <td class="text-center">${row[base+3] || "-"}</td>
+                        <td class="text-center font-bold">${row[base] || "-"}</td>
+                        <td>${row[base+1] || "-"}</td>
+                        <td class="text-center">${row[base+4] || "-"}</td>
                     </tr>
                 `;
             }
             base += 5;
         }
 
-        if(!found) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px;">No exams found.</td></tr>`;
+        if (!found) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:24px; color:#999;">No examination schedule found.</td></tr>`;
+        }
 
-        // Show Ticket
         document.getElementById("ticketBox").style.display = "block";
 
-        // Use scroll for better UX on mobile/desktop
-        document.getElementById("ticketBox").scrollIntoView({behavior: "smooth"});
+        setTimeout(() => {
+            document.getElementById("ticketBox").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }, 100);
     }
 
-    // Trigger search on Enter key
     document.getElementById("regno").addEventListener("keyup", function(event) {
-        if (event.key === "Enter") searchHT();
+        if (event.key === "Enter") {
+            searchHT();
+        }
+    });
+
+    document.getElementById("regno").addEventListener("keyup", function(event) {
+        if (event.key === "Escape") {
+            this.value = "";
+        }
     });
 
 </script>
