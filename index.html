@@ -7,14 +7,14 @@
     <title>KPRCAS Hall Ticket</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* --- RESET --- */
+        /* ================= RESET ================= */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        /* --- COLOR SYSTEM --- */
+        /* ================= COLORS ================= */
         :root {
             --green: #009746;
             --blue: #1a427e;
@@ -22,602 +22,386 @@
             --border: #d6dbe3;
             --text: #1f2937;
             --muted: #6b7280;
-            --bg: #f3f6fa;
-            --bg-soft: #f8fafc;
             --shadow: 0 8px 30px rgba(0,0,0,0.08);
         }
 
+        /* ================= BODY ================= */
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #f3f6fa 0%, #e8edf5 100%);
-            padding: 20px;
+            background: #f3f6fa;
             color: var(--text);
-            line-height: 1.55;
             min-height: 100vh;
+            padding: 20px;
         }
 
-        /* --- LOADER --- */
+        /* ================= LOADER ================= */
         #loader-overlay {
             position: fixed;
             inset: 0;
             background: #fff;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             z-index: 9999;
-            transition: opacity 0.3s;
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(0, 151, 70, 0.1);
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(0,151,70,.15);
             border-top: 4px solid var(--green);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 16px;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        /* --- SEARCH CARD --- */
+        /* ================= SEARCH ================= */
         .search-container {
             max-width: 440px;
-            margin: 50px auto;
+            margin: 60px auto;
             background: #fff;
             padding: 32px;
             border-radius: 16px;
-            box-shadow: var(--shadow);
             text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .search-container:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow);
         }
 
         .logo-img {
-            height: 95px;
+            height: 90px;
             margin-bottom: 16px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
         .instruction-text {
             font-weight: 600;
-            margin-bottom: 20px;
             color: var(--blue);
-            font-size: 15.5px;
-            letter-spacing: 0.2px;
-        }
-
-        .format-hint {
-            font-size: 12.5px;
-            color: var(--muted);
-            margin-bottom: 10px;
-            text-align: left;
-            padding-left: 4px;
-            font-weight: 500;
+            margin-bottom: 18px;
         }
 
         .input-box {
             width: 100%;
-            padding: 14px 16px;
-            font-size: 15.5px;
+            padding: 14px;
             border: 2px solid var(--border);
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
+            font-size: 15px;
             text-transform: uppercase;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            background: #fff;
-        }
-
-        .input-box:focus {
-            outline: none;
-            border-color: var(--green);
-            box-shadow: 0 0 0 3px rgba(0, 151, 70, 0.15);
-            background: #fff;
-        }
-
-        .input-box::placeholder {
-            color: #9ca3af;
-            font-weight: 400;
         }
 
         .view-btn {
             width: 100%;
             padding: 14px;
-            font-size: 15.5px;
-            background: linear-gradient(135deg, var(--green) 0%, #008a3e 100%);
+            background: var(--green);
             color: #fff;
             border: none;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 0.3px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .view-btn:hover {
-            background: linear-gradient(135deg, #008a3e 0%, #007d3a 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(0, 151, 70, 0.25);
-        }
-
-        .view-btn:active {
-            transform: translateY(0);
         }
 
         .footer-text {
-            margin-top: 22px;
+            margin-top: 20px;
             font-size: 13px;
-            font-weight: 600;
             color: var(--muted);
-            border-top: 1px solid #e5e7eb;
-            padding-top: 16px;
-            letter-spacing: 0.5px;
         }
 
-        /* --- HALL TICKET --- */
+        /* ================= HALL TICKET ================= */
         .hall-ticket {
             display: none;
             width: 210mm;
-            max-width: 100%;
-            min-height: 297mm;
-            margin: 50px auto;
+            height: 297mm;
+            margin: 40px auto;
             background: #fff;
             padding: 14mm;
             border: 1px solid var(--border);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-            border-radius: 4px;
-            animation: fadeInUp 0.5s ease-out;
+            box-shadow: 0 25px 50px rgba(0,0,0,.15);
+            overflow: hidden;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* HEADER */
+        /* ================= HEADER ================= */
         .ticket-header {
             display: flex;
             align-items: center;
-            gap: 22px;
+            gap: 20px;
             border-bottom: 3px solid var(--blue);
-            padding-bottom: 18px;
-            margin-bottom: 28px;
-            position: relative;
-        }
-
-        .ticket-header::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 100px;
-            height: 3px;
-            background: var(--green);
+            padding-bottom: 16px;
+            margin-bottom: 24px;
         }
 
         .ticket-logo {
-            width: 85px;
-            height: auto;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            width: 80px;
         }
 
         .ticket-header-text h1 {
-            font-size: 19px;
-            font-weight: 700;
+            font-size: 18px;
             color: var(--blue);
-            line-height: 1.3;
-            letter-spacing: 0.3px;
         }
 
         .ticket-header-text h2 {
-            font-size: 14.5px;
-            font-weight: 500;
-            margin-top: 6px;
-            color: #4b5563;
-            letter-spacing: 0.2px;
+            font-size: 14px;
+            color: #555;
+            margin-top: 4px;
         }
 
         .hall-ticket-label {
-            font-size: 14px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--green) 0%, #008a3e 100%);
-            color: #fff;
             display: inline-block;
-            padding: 7px 16px;
-            margin-top: 10px;
+            margin-top: 8px;
+            padding: 6px 14px;
+            background: var(--green);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
             border-radius: 6px;
-            letter-spacing: 0.8px;
-            box-shadow: 0 2px 8px rgba(0, 151, 70, 0.2);
         }
 
-        /* --- STUDENT INFO --- */
+        /* ================= STUDENT INFO ================= */
         .student-info {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            border: 1.5px solid var(--border);
-            padding: 22px;
-            margin-bottom: 28px;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-        }
-
-        .info-row {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+            grid-template-columns: repeat(3,1fr);
+            gap: 16px;
+            border: 1px solid var(--border);
+            padding: 18px;
+            margin-bottom: 22px;
+            background: #f8fafc;
         }
 
         .info-row .label {
-            font-size: 11.5px;
-            font-weight: 700;
+            font-size: 11px;
             color: var(--blue);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            opacity: 0.9;
+            font-weight: 700;
         }
 
         .info-row .value {
-            font-size: 14.5px;
+            font-size: 14px;
             font-weight: 600;
-            color: var(--text);
-            word-break: break-word;
-            line-height: 1.4;
         }
 
-        /* --- TABLE --- */
+        /* ================= TABLE ================= */
         .table-wrapper {
-            margin-bottom: 28px;
-            border-radius: 8px;
-            overflow: hidden;
             border: 2px solid var(--blue);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 22px;
+            overflow: hidden;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12.8px;
+            font-size: 12.5px;
         }
 
         th {
-            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+            background: var(--blue);
             color: #fff;
-            padding: 12px 10px;
-            font-weight: 600;
-            text-align: left;
-            border-right: 1px solid rgba(255,255,255,0.15);
-            letter-spacing: 0.5px;
-        }
-
-        th:last-child {
-            border-right: none;
+            padding: 10px;
         }
 
         td {
-            padding: 11px 10px;
+            padding: 10px;
             border: 1px solid var(--border);
-            transition: background-color 0.2s ease;
         }
 
         tbody tr:nth-child(even) {
-            background-color: #fafbfd;
+            background: #f9fafb;
         }
 
-        tbody tr:hover {
-            background-color: #f0f7ff;
-        }
+        .text-center { text-align: center; }
+        .font-bold { font-weight: 700; }
 
-        .text-center {
-            text-align: center;
-        }
-
-        .font-bold {
-            font-weight: 700;
-            color: var(--blue-dark);
-            letter-spacing: 0.3px;
-        }
-
-        /* --- INSTRUCTIONS --- */
+        /* ================= INSTRUCTIONS ================= */
         .instructions {
-            border: 1.5px solid var(--border);
-            padding: 22px;
+            border: 1px solid var(--border);
+            padding: 16px;
             font-size: 13px;
-            background: linear-gradient(135deg, #fff 0%, #fcfdfe 100%);
-            border-radius: 10px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            position: relative;
-        }
-
-        .instructions::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--green);
-            border-radius: 4px 0 0 4px;
+            background: #fff;
         }
 
         .instructions strong {
             display: block;
-            margin-bottom: 12px;
-            font-size: 14.5px;
+            margin-bottom: 10px;
             color: var(--blue);
-            letter-spacing: 0.3px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .instructions ul {
-            padding-left: 20px;
+            padding-left: 18px;
         }
 
         .instructions li {
-            margin-bottom: 10px;
-            line-height: 1.5;
-            position: relative;
+            margin-bottom: 8px;
         }
 
-        .instructions li::before {
-            content: '•';
-            color: var(--green);
-            font-weight: bold;
-            display: inline-block;
-            width: 1em;
-            margin-left: -1em;
-        }
-
-        /* --- PRINT BUTTON --- */
+        /* ================= PRINT ACTION ================= */
         .print-actions {
             text-align: center;
-            margin: 32px 0 50px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
+            margin-top: 20px;
         }
 
         .print-btn {
-            padding: 14px 42px;
-            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+            padding: 14px 40px;
+            background: var(--blue);
             color: #fff;
             border: none;
-            border-radius: 50px;
+            border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 15.5px;
-            letter-spacing: 0.3px;
-            box-shadow: 0 4px 15px rgba(26, 66, 126, 0.2);
-            position: relative;
-            overflow: hidden;
         }
 
-        .print-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(26, 66, 126, 0.3);
-            background: linear-gradient(135deg, var(--blue-dark) 0%, #0d2a52 100%);
-        }
-
-        .print-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Print hint */
-        .print-hint {
-            font-size: 12.5px;
-            color: var(--muted);
-            margin-bottom: 16px;
-            text-align: center;
-            font-style: italic;
-            opacity: 0.8;
-        }
-
-        /* --- MOBILE --- */
+        /* ======================================= */
+        /* 📱 MOBILE FIRST – PERFECT ONE SCREEN UI */
+        /* ======================================= */
         @media (max-width: 600px) {
+
+            html, body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
             body {
-                padding: 15px;
-                background: #f8fafc;
+                padding: 10px;
+                background: #f4f7fb;
             }
 
-            .search-container {
-                margin: 30px auto;
-                padding: 26px;
-                max-width: 100%;
+            /* MAIN CARD */
+            .hall-ticket {
+                display: block;
+                width: 100%;
+                height: 100%;
+                padding: 12px;
+                margin: 0;
+                border-radius: 14px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+                overflow: hidden;
             }
 
-            .logo-img {
-                height: 80px;
-            }
-
-            .student-info {
-                grid-template-columns: 1fr;
-                gap: 16px;
-                padding: 20px;
-            }
-
+            /* HEADER */
             .ticket-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 16px;
-                padding-bottom: 16px;
-            }
-
-            .ticket-header::after {
-                left: 50%;
-                transform: translateX(-50%);
-                width: 80px;
+                display: grid;
+                grid-template-columns: 52px 1fr;
+                gap: 10px;
+                padding-bottom: 8px;
+                margin-bottom: 10px;
             }
 
             .ticket-logo {
-                width: 75px;
+                width: 52px;
             }
 
             .ticket-header-text h1 {
-                font-size: 17px;
+                font-size: 14px;
+                line-height: 1.25;
             }
 
             .ticket-header-text h2 {
-                font-size: 13.5px;
+                font-size: 11px;
+                margin-top: 2px;
             }
 
-            .hall-ticket {
-                margin: 20px auto;
-                padding: 12mm;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            .hall-ticket-label {
+                font-size: 10px;
+                padding: 4px 10px;
+                margin-top: 4px;
             }
 
-            /* Make table scrollable on mobile */
+            /* STUDENT INFO – DENSE GRID */
+            .student-info {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+
+            .info-row {
+                gap: 2px;
+            }
+
+            .info-row .label {
+                font-size: 9px;
+                letter-spacing: .4px;
+            }
+
+            .info-row .value {
+                font-size: 12px;
+                line-height: 1.2;
+            }
+
+            /* EXAM TABLE – COMPACT & FIXED */
             .table-wrapper {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                border-radius: 6px;
+                margin-bottom: 8px;
+                border-width: 1px;
             }
 
             table {
-                min-width: 600px;
+                font-size: 11px;
             }
 
-            .print-btn {
-                padding: 14px 32px;
-                width: 100%;
-                max-width: 300px;
+            th {
+                padding: 6px 5px;
+                font-size: 10px;
+                text-align: center;
+            }
+
+            td {
+                padding: 6px 5px;
+                font-size: 11px;
+                text-align: center;
+                line-height: 1.2;
+            }
+
+            /* INSTRUCTIONS – ULTRA COMPACT */
+            .instructions {
+                padding: 8px;
+                font-size: 10.5px;
+                line-height: 1.3;
+            }
+
+            .instructions strong {
+                font-size: 11px;
+                margin-bottom: 6px;
+            }
+
+            .instructions li {
+                margin-bottom: 4px;
+            }
+
+            /* REMOVE NON-ESSENTIAL UI */
+            .print-actions,
+            .print-hint {
+                display: none;
             }
         }
 
-        @media (max-width: 400px) {
-            .search-container {
-                padding: 22px;
-            }
 
-            .logo-img {
-                height: 70px;
-            }
-
-            .hall-ticket {
-                padding: 10mm;
-            }
-
-            .print-btn {
-                padding: 14px 24px;
-            }
-        }
-
-        /* --- PRINT --- */
+        /* ================= PRINT ================= */
         @media print {
             @page {
-                size: A4 portrait;
+                size: A4;
                 margin: 10mm;
             }
 
             body {
-                background: #fff !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                padding: 0 !important;
+                background: #fff;
+                padding: 0;
             }
 
-            #loader-overlay,
             .search-container,
             .print-actions,
-            .print-hint {
+            #loader-overlay {
                 display: none !important;
             }
 
             .hall-ticket {
                 display: block !important;
-                box-shadow: none !important;
-                border: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                width: 100% !important;
-                min-height: auto !important;
-                animation: none !important;
-                border-radius: 0 !important;
-            }
-
-            th {
-                background: #e5e7eb !important;
-                color: #000 !important;
-                -webkit-print-color-adjust: exact;
-            }
-
-            .ticket-header::after {
-                display: none;
-            }
-
-            .instructions::before {
-                display: none;
-            }
-
-            tbody tr:hover {
-                background-color: transparent !important;
+                box-shadow: none;
+                border: none;
+                transform: none !important;
+                width: 100%;
+                height: auto;
             }
         }
-
-        /* ============================= */
-        /* FORCE SINGLE PAGE A4 (HARD)   */
-        /* ============================= */
-        .hall-ticket {
-            height: 297mm;
-            max-height: 297mm;
-            overflow: hidden;
-        }
-
-        /* Prevent ANY internal break */
-        .hall-ticket * {
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
-        }
-
-        /* Ensure table never spills */
-        .table-wrapper {
-            max-height: 120mm;
-            overflow: hidden;
-        }
-
-        /* Instruction block controlled */
-        .instructions {
-            max-height: 45mm;
-            overflow: hidden;
-        }
-
-        /* Remove extra margins in print */
-        @media print {
-            html, body {
-                height: 297mm;
-                overflow: hidden;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .hall-ticket {
-                height: 297mm;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-        }
-
     </style>
+
 </head>
 <body>
 
