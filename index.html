@@ -648,9 +648,9 @@
     <div class="student-info">
         <div class="info-row"><span class="label">Name</span><span class="value" id="name"></span></div>
         <div class="info-row"><span class="label">Register No</span><span class="value" id="reg"></span></div>
-        <div class="info-row"><span class="label">Course</span><span class="value" id="course"></span></div>
+        <div class="info-row"><span class="label">Degree</span><span class="value" id="course"></span></div>
         <div class="info-row"><span class="label">Department</span><span class="value" id="dept"></span></div>
-        <div class="info-row"><span class="label">Year / Semester</span><span class="value" id="yearsem"></span></div>
+        <div class="info-row"><span class="label">Year</span><span class="value" id="yearsem"></span></div>
     </div>
 
     <div class="table-wrapper">
@@ -678,7 +678,6 @@
         </ul>
     </div>
 
-    <div class="print-hint">For best print quality, use Chrome/Firefox browser</div>
 
     <div class="print-actions">
         <button class="print-btn" onclick="window.print()">Download PDF / Print</button>
@@ -686,21 +685,22 @@
 </div>
 
 <script>
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT0vYriv1vZJed1R8Weh2KxuvfWRc49BtKbfph55A2RMQjSl0zwFG1J4qagZVN0iLnW6EK_gFCJWHRV/pub?output=csv";
+    const SHEET_URL =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT0vYriv1vZJed1R8Weh2KxuvfWRc49BtKbfph55A2RMQjSl0zwFG1J4qagZVN0iLnW6EK_gFCJWHRV/pub?output=csv";
 
     const dataMap = new Map();
 
     const els = {
-        loader: document.getElementById('loader-overlay'),
-        regInput: document.getElementById('regno'),
-        btn: document.getElementById('btn'),
-        ticketBox: document.getElementById('ticketBox'),
-        name: document.getElementById('name'),
-        reg: document.getElementById('reg'),
-        dept: document.getElementById('dept'),
-        yearsem: document.getElementById('yearsem'),
-        course: document.getElementById('course'),
-        tbody: document.getElementById('tbody')
+        loader: document.getElementById("loader-overlay"),
+        regInput: document.getElementById("regno"),
+        btn: document.getElementById("btn"),
+        ticketBox: document.getElementById("ticketBox"),
+        name: document.getElementById("name"),
+        reg: document.getElementById("reg"),
+        dept: document.getElementById("dept"),
+        yearsem: document.getElementById("yearsem"),
+        course: document.getElementById("course"),
+        tbody: document.getElementById("tbody")
     };
 
     fetch(SHEET_URL)
@@ -709,7 +709,9 @@
             const rows = csv.split(/\r?\n/).slice(1);
 
             rows.forEach(row => {
-                const cols = row.split(",").map(c => c.replace(/"/g, "").trim());
+                const cols = row.split(",").map(c =>
+                    c.replace(/"/g, "").trim()
+                );
 
                 const regNo = cols[2]?.toUpperCase();
                 if (!regNo) return;
@@ -720,20 +722,23 @@
                             name: cols[1],
                             reg: regNo,
                             dept: cols[8],
-                            yearsem: cols[4],
-                            course: cols[7]
+                            course: cols[7],
+                            yearsem: cols[5]
                         },
                         subjects: []
                     });
                 }
 
-                dataMap.get(regNo).subjects.push({
-                    date: cols[16],
-                    session: cols[17],
-                    code: cols[13],
-                    title: cols[15],
-                    hall: cols[18]
-                });
+                // Push ONE SUBJECT per row
+                if (cols[13] && cols[15]) {
+                    dataMap.get(regNo).subjects.push({
+                        date: cols[16],
+                        session: cols[17],
+                        code: cols[13],
+                        title: cols[15],
+                        hall: cols[18]
+                    });
+                }
             });
 
             els.loader.style.display = "none";
@@ -741,35 +746,35 @@
             els.btn.disabled = false;
         })
         .catch(() => {
-            els.loader.innerHTML = "<p style='color:red'>Failed to load data</p>";
+            els.loader.innerHTML =
+                "<p style='color:#dc2626;font-weight:600'>Failed to load data</p>";
         });
 
-
-        function searchHT() {
+    function searchHT() {
         const regNo = els.regInput.value.trim().toUpperCase();
 
         if (!regNo) {
-        alert("Enter Register Number");
-        return;
-    }
+            alert("Please enter Register Number");
+            return;
+        }
 
         if (!dataMap.has(regNo)) {
-        alert("Register Number Not Found");
-        return;
-    }
+            alert("Register Number Not Found");
+            return;
+        }
 
         const data = dataMap.get(regNo);
 
         els.name.innerText = data.student.name;
         els.reg.innerText = data.student.reg;
         els.dept.innerText = data.student.dept;
-        els.yearsem.innerText = data.student.yearsem;
         els.course.innerText = data.student.course;
+        els.yearsem.innerText = data.student.yearsem;
 
         els.tbody.innerHTML = "";
 
         data.subjects.forEach(sub => {
-        els.tbody.innerHTML += `
+            els.tbody.innerHTML += `
       <tr>
         <td class="text-center">${sub.date}</td>
         <td class="text-center">${sub.session}</td>
@@ -778,12 +783,13 @@
         <td class="text-center">${sub.hall}</td>
       </tr>
     `;
-    });
+        });
 
         document.getElementById("searchBox").style.display = "none";
         els.ticketBox.style.display = "block";
     }
 </script>
+
 
 <script>
     // Disable right click
