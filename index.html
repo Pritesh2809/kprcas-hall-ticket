@@ -629,7 +629,7 @@
 <div class="search-container" id="searchBox">
     <img src="https://i.postimg.cc/t4SNTBXV/only-KPR-Color.png" class="logo-img" alt="Logo">
     <div class="instruction-text">Enter Your Register Number to View Hall Ticket</div>
-   
+
     <input type="text" id="regno" class="input-box" placeholder="e.g., 2328c0035" disabled>
     <button class="view-btn" id="btn" onclick="searchHT()" disabled>View Hall Ticket</button>
     <div class="footer-text">CIA-1 EXAMINATIONS FEB 2026</div>
@@ -686,10 +686,10 @@
 </div>
 
 <script>
-    // Google Sheets CSV Export Link
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNN-aweHGorS3xF5LAZE7caqrkN4Ur5CMBHSrE_4qGQdLw9ekNBm8fvTCU2lZ8WcP9a6m-tY1T1zsy/pub?gid=1191861589&single=true&output=csv";
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT0vYriv1vZJed1R8Weh2KxuvfWRc49BtKbfph55A2RMQjSl0zwFG1J4qagZVN0iLnW6EK_gFCJWHRV/pub?output=csv";
 
     const dataMap = new Map();
+
     const els = {
         loader: document.getElementById('loader-overlay'),
         regInput: document.getElementById('regno'),
@@ -703,82 +703,88 @@
         tbody: document.getElementById('tbody')
     };
 
-    // Fetch Data
     fetch(SHEET_URL)
-        .then(response => response.text())
-        .then(csvText => {
-            const rows = csvText.split(/\r?\n/).slice(1); // Skip header
+        .then(res => res.text())
+        .then(csv => {
+            const rows = csv.split(/\r?\n/).slice(1);
+
             rows.forEach(row => {
-                const cols = row.split(",");
-                if (cols[2]) {
-                    const regNo = cols[2].replace(/"/g, "").trim().toUpperCase();
-                    dataMap.set(regNo, cols);
+                const cols = row.split(",").map(c => c.replace(/"/g, "").trim());
+
+                const regNo = cols[2]?.toUpperCase();
+                if (!regNo) return;
+
+                if (!dataMap.has(regNo)) {
+                    dataMap.set(regNo, {
+                        student: {
+                            name: cols[1],
+                            reg: regNo,
+                            dept: cols[8],
+                            yearsem: cols[4],
+                            course: cols[7]
+                        },
+                        subjects: []
+                    });
                 }
+
+                dataMap.get(regNo).subjects.push({
+                    date: cols[16],
+                    session: cols[17],
+                    code: cols[13],
+                    title: cols[15],
+                    hall: cols[18]
+                });
             });
+
             els.loader.style.display = "none";
             els.regInput.disabled = false;
             els.btn.disabled = false;
         })
-        .catch(err => {
-            console.error("Error loading sheet:", err);
-            els.loader.innerHTML = "<p style='color:#dc2626; font-weight:500;'>Error loading data. Please refresh the page.</p>";
+        .catch(() => {
+            els.loader.innerHTML = "<p style='color:red'>Failed to load data</p>";
         });
 
-    function searchHT() {
-        const inputReg = els.regInput.value.trim().toUpperCase();
 
-        if (!inputReg) {
-            alert("Please enter a Register Number.");
-            return;
-        }
+        function searchHT() {
+        const regNo = els.regInput.value.trim().toUpperCase();
 
-        if (!dataMap.has(inputReg)) {
-            alert("Register Number Not Found or Invalid.");
-            return;
-        }
+        if (!regNo) {
+        alert("Enter Register Number");
+        return;
+    }
 
-        const data = dataMap.get(inputReg);
+        if (!dataMap.has(regNo)) {
+        alert("Register Number Not Found");
+        return;
+    }
 
-        els.name.innerText = data[1] || "-";
-        els.reg.innerText = inputReg;
-        els.dept.innerText = data[3] || "-";
-        els.yearsem.innerText = (data[4] || "") + " / " + (data[5] || "");
-        els.course.innerText = data[6] || "-";
+        const data = dataMap.get(regNo);
+
+        els.name.innerText = data.student.name;
+        els.reg.innerText = data.student.reg;
+        els.dept.innerText = data.student.dept;
+        els.yearsem.innerText = data.student.yearsem;
+        els.course.innerText = data.student.course;
 
         els.tbody.innerHTML = "";
-        let startIndex = 7;
-        const maxSubjects = 8;
 
-        for (let k = 0; k < maxSubjects; k++) {
-            if (data[startIndex]) {
-                const date = data[startIndex + 2] || "";
-                const session = data[startIndex + 3] || "";
-                const subCode = data[startIndex] || "";
-                const subName = data[startIndex + 1] || "";
-                const venue = data[startIndex + 4] || "";
+        data.subjects.forEach(sub => {
+        els.tbody.innerHTML += `
+      <tr>
+        <td class="text-center">${sub.date}</td>
+        <td class="text-center">${sub.session}</td>
+        <td class="text-center font-bold">${sub.code}</td>
+        <td>${sub.title}</td>
+        <td class="text-center">${sub.hall}</td>
+      </tr>
+    `;
+    });
 
-                const rowHTML = `
-          <tr>
-            <td class="text-center">${date}</td>
-            <td class="text-center">${session}</td>
-            <td class="text-center font-bold">${subCode}</td>
-            <td>${subName}</td>
-            <td class="text-center">${venue}</td>
-          </tr>
-        `;
-                els.tbody.innerHTML += rowHTML;
-            }
-            startIndex += 5;
-        }
-
-        els.ticketBox.style.display = "block";
         document.getElementById("searchBox").style.display = "none";
-
-        setTimeout(() => {
-            els.ticketBox.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100);
+        els.ticketBox.style.display = "block";
     }
 </script>
+
 <script>
     // Disable right click
     document.addEventListener('contextmenu', function (e) {
@@ -803,6 +809,9 @@
         }
     });
 </script>
+
+
+
 
 </body>
 </html>
