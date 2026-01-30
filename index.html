@@ -250,6 +250,34 @@
             cursor: pointer;
         }
 
+
+
+
+        /* ================= EXAM TIMING ================= */
+.exam-timing {
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.exam-timing strong {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.exam-timing .timing {
+  font-weight: 600;
+  color: #111827;
+}
+
+
+
+        
+        
         /* ======================================= */
         /* 📱 MOBILE FIRST – PERFECT ONE SCREEN UI */
         /* ======================================= */
@@ -372,6 +400,13 @@
             .print-hint {
                 display: none;
             }
+
+            .exam-timing {
+  font-size: 11px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
         }
 
 
@@ -455,6 +490,19 @@
             <tbody id="tbody"></tbody>
         </table>
     </div>
+
+    <!-- ================= EXAM TIMING ================= -->
+<div class="exam-timing">
+  <div><strong>Duration of Examination:</strong> 2 Hours</div>
+  <div>
+    <strong>Exam Timing:</strong>
+    <span class="timing">
+      FN: 09:30 a.m. – 11:30 a.m. |
+      AN: 02:00 p.m. – 04:00 p.m.
+    </span>
+  </div>
+</div>
+
 
     <div class="instructions">
         <strong>📋 Instructions</strong>
