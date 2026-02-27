@@ -8,7 +8,6 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-
 :root{
 --green:#009746;
 --blue:#1a427e;
@@ -18,7 +17,6 @@
 --muted:#6b7280;
 --shadow:0 8px 30px rgba(0,0,0,0.08)
 }
-
 body{
 font-family:'Roboto',sans-serif;
 background:#f3f6fa;
@@ -27,6 +25,7 @@ min-height:100vh;
 padding:20px
 }
 
+/* LOADER */
 #loader-overlay{
 position:fixed;
 inset:0;
@@ -37,20 +36,16 @@ justify-content:center;
 align-items:center;
 z-index:9999
 }
-
 .spinner{
-width:48px;
-height:48px;
+width:48px;height:48px;
 border:4px solid rgba(0,151,70,.15);
 border-top:4px solid var(--green);
 border-radius:50%;
 animation:spin 1s linear infinite
 }
+@keyframes spin{to{transform:rotate(360deg)}}
 
-@keyframes spin{
-to{transform:rotate(360deg)}
-}
-
+/* SEARCH */
 .search-container{
 max-width:440px;
 margin:60px auto;
@@ -60,191 +55,82 @@ border-radius:16px;
 text-align:center;
 box-shadow:var(--shadow)
 }
-
-.logo-img{
-height:90px;
-margin-bottom:16px
-}
-
-.instruction-text{
-font-weight:600;
-color:var(--blue);
-margin-bottom:18px
-}
-
+.logo-img{height:90px;margin-bottom:16px}
+.instruction-text{font-weight:600;color:var(--blue);margin-bottom:18px}
 .input-box{
-width:100%;
-padding:14px;
-border:2px solid var(--border);
-border-radius:8px;
-margin-bottom:18px;
-font-size:15px;
-text-transform:uppercase
+width:100%;padding:14px;border:2px solid var(--border);
+border-radius:8px;margin-bottom:18px;
+font-size:15px;text-transform:uppercase
 }
-
 .view-btn{
-width:100%;
-padding:14px;
-background:var(--green);
-color:#fff;
-border:none;
-border-radius:8px;
-font-weight:600;
-cursor:pointer
+width:100%;padding:14px;background:var(--green);
+color:#fff;border:none;border-radius:8px;
+font-weight:600;cursor:pointer
 }
+.footer-text{margin-top:20px;font-size:13px;color:var(--muted)}
 
-.footer-text{
-margin-top:20px;
-font-size:13px;
-color:var(--muted)
-}
-
+/* HALL TICKET */
 .hall-ticket{
-display:none;
-width:210mm;
-min-height:297mm;
-margin:40px auto;
-background:#fff;
-padding:14mm;
+display:none;width:210mm;min-height:297mm;
+margin:40px auto;background:#fff;padding:14mm;
 border:1px solid var(--border);
 box-shadow:0 25px 50px rgba(0,0,0,.15)
 }
-
 .ticket-header{
-display:flex;
-align-items:center;
-gap:20px;
+display:flex;align-items:center;gap:20px;
 border-bottom:3px solid var(--blue);
-padding-bottom:16px;
-margin-bottom:24px
+padding-bottom:16px;margin-bottom:24px
 }
-
-.ticket-logo{
-width:120px
-}
-
-.ticket-header-text h1{
-font-size:18px;
-color:var(--blue)
-}
-
-.ticket-header-text h2{
-font-size:14px;
-color:#555;
-margin-top:4px
-}
-
+.ticket-logo{width:120px}
+.ticket-header-text h1{font-size:18px;color:var(--blue)}
+.ticket-header-text h2{font-size:14px;color:#555;margin-top:4px}
 .hall-ticket-label{
-display:inline-block;
-margin-top:8px;
-padding:6px 14px;
-background:var(--green);
-color:#fff;
-font-size:13px;
-font-weight:700;
-border-radius:6px
+display:inline-block;margin-top:8px;
+padding:6px 14px;background:var(--green);
+color:#fff;font-size:13px;font-weight:700;border-radius:6px
 }
-
 .student-info{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:16px;
-border:1px solid var(--border);
-padding:18px;
-margin-bottom:22px;
-background:#f8fafc
+display:grid;grid-template-columns:repeat(3,1fr);
+gap:16px;border:1px solid var(--border);
+padding:18px;margin-bottom:22px;background:#f8fafc
 }
+.info-row .label{font-size:11px;color:var(--blue);font-weight:700}
+.info-row .value{font-size:14px;font-weight:600}
 
-.info-row .label{
-font-size:11px;
-color:var(--blue);
-font-weight:700
-}
-
-.info-row .value{
-font-size:14px;
-font-weight:600
-}
-
-.table-wrapper{
-border:2px solid var(--blue);
-margin-bottom:22px
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-font-size:12.5px
-}
-
-th{
-background:var(--blue);
-color:#fff;
-padding:10px
-}
-
-td{
-padding:10px;
-border:1px solid var(--border)
-}
-
-tbody tr:nth-child(even){
-background:#f9fafb
-}
-
+.table-wrapper{border:2px solid var(--blue);margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--blue);color:#fff;padding:10px}
+td{padding:10px;border:1px solid var(--border)}
+tbody tr:nth-child(even){background:#f9fafb}
 .text-center{text-align:center}
 .font-bold{font-weight:700}
 
-.instructions{
-border:1px solid var(--border);
-padding:16px;
-font-size:13px;
-background:#fff
-}
-
-.instructions strong{
-display:block;
-margin-bottom:10px;
-color:var(--blue)
-}
-
-.instructions ul{
-padding-left:18px
-}
-
-.instructions li{
-margin-bottom:8px
-}
-
-.print-actions{
-text-align:center;
-margin-top:20px
-}
-
-.print-btn{
-padding:14px 40px;
-background:var(--blue);
-color:#fff;
-border:none;
-border-radius:40px;
-font-weight:600;
-cursor:pointer
-}
-
 .exam-timing{
 border:1px solid var(--border);
-background:#f8fafc;
-padding:12px 16px;
-margin-bottom:18px;
-font-size:13px;
-text-align:center;
-line-height:1.6
+background:#f8fafc;padding:12px 16px;
+margin-bottom:18px;font-size:13px;
+text-align:center;line-height:1.6
+}
+.exam-timing strong{color:var(--blue)}
+
+.instructions{
+border:1px solid var(--border);
+padding:16px;font-size:13px;background:#fff
+}
+.instructions strong{
+display:block;margin-bottom:10px;color:var(--blue)
+}
+.instructions ul{padding-left:18px}
+.instructions li{margin-bottom:8px}
+
+.print-actions{text-align:center;margin-top:20px}
+.print-btn{
+padding:14px 40px;background:var(--blue);
+color:#fff;border:none;border-radius:40px;
+font-weight:600;cursor:pointer
 }
 
-.exam-timing strong{
-color:var(--blue)
-}
-
+/* PRINT */
 @media print{
 .search-container,.print-actions,#loader-overlay{display:none!important}
 .hall-ticket{display:block!important;box-shadow:none;border:none}
@@ -260,30 +146,29 @@ color:var(--blue)
 
 <div class="search-container" id="searchBox">
 <img src="https://i.postimg.cc/t4SNTBXV/only-KPR-Color.png" class="logo-img">
-<div class="instruction-text">Enter Your Register Number</div>
+<div class="instruction-text">Enter Your Register Number to View Hall Ticket</div>
 <input type="text" id="regno" class="input-box" disabled>
 <button class="view-btn" id="btn" onclick="searchHT()" disabled>View Hall Ticket</button>
 <div class="footer-text">CIA-II EXAMINATIONS MAR 2026</div>
 </div>
 
 <div class="hall-ticket" id="ticketBox">
-
 <div class="ticket-header">
 <img src="https://i.postimg.cc/t4SNTBXV/only-KPR-Color.png" class="ticket-logo">
 <div class="ticket-header-text">
 <h1>KPR College of Arts Science and Research</h1>
-<h2>Avinashi road, Arasur, Coimbatore</h2>
+<h2>Avinashi road, Arasur, Coimbatore.</h2>
 <h2>CIA-II Examinations – March 2026</h2>
 <span class="hall-ticket-label">HALL TICKET</span>
 </div>
 </div>
 
 <div class="student-info">
-<div class="info-row"><span class="label">Name: </span><span class="value" id="name"></span></div>
-<div class="info-row"><span class="label">Register No: </span><span class="value" id="reg"></span></div>
-<div class="info-row"><span class="label">Degree: </span><span class="value" id="course"></span></div>
-<div class="info-row"><span class="label">Department: </span><span class="value" id="dept"></span></div>
-<div class="info-row"><span class="label">Year: </span><span class="value" id="yearsem"></span></div>
+<div class="info-row"><span class="label">Name:</span> <span class="value" id="name"></span></div>
+<div class="info-row"><span class="label">Register No:</span> <span class="value" id="reg"></span></div>
+<div class="info-row"><span class="label">Degree:</span> <span class="value" id="course"></span></div>
+<div class="info-row"><span class="label">Department:</span> <span class="value" id="dept"></span></div>
+<div class="info-row"><span class="label">Year:</span> <span class="value" id="yearsem"></span></div>
 </div>
 
 <div class="table-wrapper">
@@ -316,9 +201,8 @@ color:var(--blue)
 </div>
 
 <div class="print-actions">
-<button class="print-btn" onclick="window.print()">Download / Print</button>
+<button class="print-btn" onclick="window.print()">Download PDF / Print</button>
 </div>
-
 </div>
 
 <script>
@@ -349,8 +233,10 @@ fetch(SHEET_URL)
 .then(r=>r.text())
 .then(csv=>{
 const rows=csv.split(/\r?\n/).slice(1);
+
 rows.forEach(row=>{
 const cols=row.split(",").map(c=>c.replace(/"/g,"").trim());
+
 const regNo=cols[2]?.toUpperCase();
 if(!regNo)return;
 
@@ -367,6 +253,7 @@ subjects:[]
 });
 }
 
+/* UPDATED COLUMN INDEX */
 if(cols[11]&&cols[13]){
 dataMap.get(regNo).subjects.push({
 date:formatDate(cols[14]),
@@ -386,7 +273,7 @@ els.btn.disabled=false;
 function searchHT(){
 const regNo=els.regInput.value.trim().toUpperCase();
 if(!regNo)return alert("Enter Register Number");
-if(!dataMap.has(regNo))return alert("Not Found");
+if(!dataMap.has(regNo))return alert("Register Number Not Found");
 
 const data=dataMap.get(regNo);
 
@@ -397,7 +284,6 @@ els.course.innerText=data.student.course;
 els.yearsem.innerText=data.student.yearsem;
 
 els.tbody.innerHTML="";
-
 data.subjects.forEach(s=>{
 els.tbody.innerHTML+=`
 <tr>
