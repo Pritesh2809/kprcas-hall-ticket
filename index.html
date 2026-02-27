@@ -1,357 +1,615 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KPRCAS Hall Ticket</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
+<!DOCTYPE html>  <html lang="en">    <head>    
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>KPRCAS Hall Ticket</title>    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  <style>    
+    /* ================= RESET ================= */    
+    * {    
+        box-sizing: border-box;    
+        margin: 0;    
+        padding: 0;    
+    }    /* ================= COLORS ================= */    
+:root {    
+    --green: #009746;    
+    --blue: #1a427e;    
+    --blue-dark: #14335f;    
+    --border: #d6dbe3;    
+    --text: #1f2937;    
+    --muted: #6b7280;    
+    --shadow: 0 8px 30px rgba(0,0,0,0.08);    
+}    
 
-:root{
---green:#009746;
---blue:#1a427e;
---border:#d6dbe3;
---text:#1f2937;
---muted:#6b7280;
---shadow:0 8px 30px rgba(0,0,0,0.08)
+/* ================= BODY ================= */    
+body {    
+    font-family: 'Roboto', sans-serif;    
+    background: #f3f6fa;    
+    color: var(--text);    
+    min-height: 100vh;    
+    padding: 20px;    
+}    
+
+/* ================= LOADER ================= */    
+#loader-overlay {    
+    position: fixed;    
+    inset: 0;    
+    background: #fff;    
+    display: flex;    
+    flex-direction: column;    
+    justify-content: center;    
+    align-items: center;    
+    z-index: 9999;    
+}    
+
+.spinner {    
+    width: 48px;    
+    height: 48px;    
+    border: 4px solid rgba(0,151,70,.15);    
+    border-top: 4px solid var(--green);    
+    border-radius: 50%;    
+    animation: spin 1s linear infinite;    
+}    
+
+@keyframes spin {    
+    to { transform: rotate(360deg); }    
+}    
+
+/* ================= SEARCH ================= */    
+.search-container {    
+    max-width: 440px;    
+    margin: 60px auto;    
+    background: #fff;    
+    padding: 32px;    
+    border-radius: 16px;    
+    text-align: center;    
+    box-shadow: var(--shadow);    
+}    
+
+.logo-img {    
+    height: 90px;    
+    margin-bottom: 16px;    
+}    
+
+.instruction-text {    
+    font-weight: 600;    
+    color: var(--blue);    
+    margin-bottom: 18px;    
+}    
+
+.input-box {    
+    width: 100%;    
+    padding: 14px;    
+    border: 2px solid var(--border);    
+    border-radius: 8px;    
+    margin-bottom: 18px;    
+    font-size: 15px;    
+    text-transform: uppercase;    
+}    
+
+.view-btn {    
+    width: 100%;    
+    padding: 14px;    
+    background: var(--green);    
+    color: #fff;    
+    border: none;    
+    border-radius: 8px;    
+    font-weight: 600;    
+    cursor: pointer;    
+}    
+
+.footer-text {    
+    margin-top: 20px;    
+    font-size: 13px;    
+    color: var(--muted);    
+}    
+
+/* ================= HALL TICKET ================= */    
+.hall-ticket {    
+    display: none;    
+    width: 210mm;    
+    height: 297mm;    
+    margin: 40px auto;    
+    background: #fff;    
+    padding: 14mm;    
+    border: 1px solid var(--border);    
+    box-shadow: 0 25px 50px rgba(0,0,0,.15);    
+    overflow: hidden;    
+}    
+
+/* ================= HEADER ================= */    
+.ticket-header {    
+    display: flex;    
+    align-items: center;    
+    gap: 20px;    
+    border-bottom: 3px solid var(--blue);    
+    padding-bottom: 16px;    
+    margin-bottom: 24px;    
+}    
+
+.ticket-logo {    
+    width: 120px;    
+}    
+
+.ticket-header-text h1 {    
+    font-size: 18px;    
+    color: var(--blue);    
+}    
+
+.ticket-header-text h2 {    
+    font-size: 14px;    
+    color: #555;    
+    margin-top: 4px;    
+}    
+
+.hall-ticket-label {    
+    display: inline-block;    
+    margin-top: 8px;    
+    padding: 6px 14px;    
+    background: var(--green);    
+    color: #fff;    
+    font-size: 13px;    
+    font-weight: 700;    
+    border-radius: 6px;    
+}    
+
+/* ================= STUDENT INFO ================= */    
+.student-info {    
+    display: grid;    
+    grid-template-columns: repeat(3,1fr);    
+    gap: 16px;    
+    border: 1px solid var(--border);    
+    padding: 18px;    
+    margin-bottom: 22px;    
+    background: #f8fafc;    
+}    
+
+.info-row .label {    
+    font-size: 11px;    
+    color: var(--blue);    
+    font-weight: 700;    
+}    
+
+.info-row .value {    
+    font-size: 14px;    
+    font-weight: 600;    
+}    
+
+/* ================= TABLE ================= */    
+.table-wrapper {    
+    border: 2px solid var(--blue);    
+    margin-bottom: 22px;    
+    overflow: hidden;    
+}    
+
+table {    
+    width: 100%;    
+    border-collapse: collapse;    
+    font-size: 12.5px;    
+}    
+
+th {    
+    background: var(--blue);    
+    color: #fff;    
+    padding: 10px;    
+}    
+
+td {    
+    padding: 10px;    
+    border: 1px solid var(--border);    
+}    
+
+tbody tr:nth-child(even) {    
+    background: #f9fafb;    
+}    
+
+.text-center { text-align: center; }    
+.font-bold { font-weight: 700; }    
+
+/* ================= INSTRUCTIONS ================= */    
+.instructions {    
+    border: 1px solid var(--border);    
+    padding: 16px;    
+    font-size: 13px;    
+    background: #fff;    
+}    
+
+.instructions strong {    
+    display: block;    
+    margin-bottom: 10px;    
+    color: var(--blue);    
+}    
+
+.instructions ul {    
+    padding-left: 18px;    
+}    
+
+.instructions li {    
+    margin-bottom: 8px;    
+}    
+
+/* ================= PRINT ACTION ================= */    
+.print-actions {    
+    text-align: center;    
+    margin-top: 20px;    
+}    
+
+.print-btn {    
+    padding: 14px 40px;    
+    background: var(--blue);    
+    color: #fff;    
+    border: none;    
+    border-radius: 40px;    
+    font-weight: 600;    
+    cursor: pointer;    
+}    
+
+
+
+
+/* ================= EXAM TIMING ================= */
+
+.exam-timing {
+border: 1px solid var(--border);
+background: #f8fafc;
+padding: 12px 16px;
+margin-bottom: 18px;
+font-size: 13px;
+text-align: center;
+line-height: 1.6;
 }
 
-body{
-font-family:'Roboto',sans-serif;
-background:#f3f6fa;
-color:var(--text);
-min-height:100vh;
-padding:20px
+.exam-timing strong {
+color: var(--blue);
+font-weight: 700;
 }
 
-/* LOADER */
-#loader-overlay{
-position:fixed;
-inset:0;
-background:#fff;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-z-index:9999
-}
-.spinner{
-width:48px;height:48px;
-border:4px solid rgba(0,151,70,.15);
-border-top:4px solid var(--green);
-border-radius:50%;
-animation:spin 1s linear infinite
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* SEARCH */
-.search-container{
-max-width:440px;
-margin:60px auto;
-background:#fff;
-padding:32px;
-border-radius:16px;
-text-align:center;
-box-shadow:var(--shadow)
-}
-.logo-img{height:90px;margin-bottom:16px}
-.instruction-text{font-weight:600;color:var(--blue);margin-bottom:18px}
-.input-box{
-width:100%;padding:14px;border:2px solid var(--border);
-border-radius:8px;margin-bottom:18px;
-font-size:15px;text-transform:uppercase
-}
-.view-btn{
-width:100%;padding:14px;background:var(--green);
-color:#fff;border:none;border-radius:8px;
-font-weight:600;cursor:pointer
-}
-.footer-text{margin-top:20px;font-size:13px;color:var(--muted)}
-
-/* HALL TICKET */
-.hall-ticket{
-display:none;
-width:210mm;
-min-height:297mm;
-margin:40px auto;
-background:#fff;
-padding:14mm;
-border:1px solid var(--border);
-box-shadow:0 25px 50px rgba(0,0,0,.15)
-}
-.ticket-header{
-display:flex;align-items:center;gap:20px;
-border-bottom:3px solid var(--blue);
-padding-bottom:16px;margin-bottom:24px
-}
-.ticket-logo{width:120px}
-.ticket-header-text h1{font-size:18px;color:var(--blue)}
-.ticket-header-text h2{font-size:14px;color:#555;margin-top:4px}
-.hall-ticket-label{
-display:inline-block;margin-top:8px;
-padding:6px 14px;background:var(--green);
-color:#fff;font-size:13px;font-weight:700;border-radius:6px
+.exam-timing .timing {
+font-weight: 600;
+color: #111827;
 }
 
-/* STUDENT INFO */
-.student-info{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:16px;border:1px solid var(--border);
-padding:18px;margin-bottom:22px;background:#f8fafc
-}
-.info-row .label{font-size:11px;color:var(--blue);font-weight:700}
-.info-row .value{font-size:14px;font-weight:600}
+/* ======================================= /
+/ 📱 MOBILE FIRST – PERFECT ONE SCREEN UI /
+/ ======================================= */
+@media (max-width: 600px) {
 
-/* TABLE */
-.table-wrapper{border:2px solid var(--blue);margin-bottom:22px}
-table{width:100%;border-collapse:collapse;font-size:12.5px}
-th{background:var(--blue);color:#fff;padding:10px}
-td{padding:10px;border:1px solid var(--border)}
-tbody tr:nth-child(even){background:#f9fafb}
-.text-center{text-align:center}
-.font-bold{font-weight:700}
+html, body {    
+        height: 100vh;    
+        overflow: hidden;    
+    }    
 
-/* EXAM TIMING */
-.exam-timing{
-border:1px solid var(--border);
-background:#f8fafc;padding:12px;
-margin-bottom:18px;font-size:13px;text-align:center
-}
-.exam-timing strong{color:var(--blue)}
+    body {    
+        padding: 10px;    
+        background: #f4f7fb;    
+    }    
 
-/* INSTRUCTIONS */
-.instructions{
-border:1px solid var(--border);
-padding:16px;font-size:13px;background:#fff
-}
-.instructions strong{display:block;margin-bottom:10px;color:var(--blue)}
-.instructions ul{padding-left:18px}
-.instructions li{margin-bottom:8px}
+    /* MAIN CARD */    
+    .hall-ticket {    
 
-.print-actions{text-align:center;margin-top:20px}
-.print-btn{
-padding:14px 40px;background:var(--blue);
-color:#fff;border:none;border-radius:40px;
-font-weight:600;cursor:pointer
-}
+        width: 100%;    
+        height: 100%;    
+        padding: 12px;    
+        margin: 0;    
+        border-radius: 14px;    
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);    
+        overflow: hidden;    
+    }    
 
-/* MOBILE */
-@media (max-width:600px){
+    /* HEADER */    
+    .ticket-header {    
+        display: grid;    
+        grid-template-columns: 52px 1fr;    
+        gap: 10px;    
+        padding-bottom: 8px;    
+        margin-bottom: 10px;    
+    }    
 
-html,body{height:100vh;overflow:hidden;background:#eef2f7}
+    .ticket-logo {    
+        width: 60px;    
+    }    
 
-.search-container{margin:40px 10px;padding:20px}
+    .ticket-header-text h1 {    
+        font-size: 14px;    
+        line-height: 1.25;    
+    }    
 
-.hall-ticket{
-width:100%;height:100vh;margin:0;
-padding:12px;border-radius:16px;
-box-shadow:none;overflow:hidden
-}
+    .ticket-header-text h2 {    
+        font-size: 11px;    
+        margin-top: 2px;    
+    }    
 
-.ticket-header{
-display:grid;grid-template-columns:55px 1fr;
-gap:10px;padding-bottom:8px;margin-bottom:10px
-}
-.ticket-logo{width:55px}
-.ticket-header-text h1{font-size:13px}
-.ticket-header-text h2{font-size:10px}
-.hall-ticket-label{font-size:9px;padding:3px 8px}
+    .hall-ticket-label {    
+        font-size: 10px;    
+        padding: 4px 10px;    
+        margin-top: 4px;    
+    }    
 
-.student-info{
-grid-template-columns:repeat(2,1fr);
-gap:8px;padding:8px;margin-bottom:10px
-}
-.info-row .label{font-size:8px}
-.info-row .value{font-size:11px}
+    /* STUDENT INFO – DENSE GRID */    
+    .student-info {    
+        grid-template-columns: repeat(2, 1fr);    
+        gap: 8px;    
+        padding: 10px;    
+        margin-bottom: 10px;    
+    }    
 
-table{font-size:10px}
-th{padding:5px;font-size:9px}
-td{padding:5px;font-size:10px}
+    .info-row {    
+        gap: 2px;    
+    }    
 
-.exam-timing{font-size:10px;padding:6px}
-.instructions{padding:6px;font-size:9px;line-height:1.2}
-.instructions li{margin-bottom:3px}
+    .info-row .label {    
+        font-size: 9px;    
+        letter-spacing: .4px;    
+    }    
 
-.print-actions{display:none}
-}
+    .info-row .value {    
+        font-size: 12px;    
+        line-height: 1.2;    
+    }    
 
-/* PRINT */
-@media print{
-.search-container,.print-actions,#loader-overlay{display:none!important}
-.hall-ticket{display:block!important;box-shadow:none;border:none}
-}
-</style>
-</head>
+    /* EXAM TABLE – COMPACT & FIXED */    
+    .table-wrapper {    
+        margin-bottom: 8px;    
+        border-width: 1px;    
+    }    
 
-<body>
+    table {    
+        font-size: 11px;    
+    }    
 
-<div id="loader-overlay">
-<div class="spinner"></div>
-<p style="margin-top:8px">Loading Database...</p>
-</div>
+    th {    
+        padding: 6px 5px;    
+        font-size: 10px;    
+        text-align: center;    
+    }    
 
-<div class="search-container" id="searchBox">
-<img src="https://i.postimg.cc/t4SNTBXV/only-KPR-Color.png" class="logo-img">
-<div class="instruction-text">Enter Your Register Number</div>
-<input type="text" id="regno" class="input-box" disabled>
-<button class="view-btn" id="btn" onclick="searchHT()" disabled>View Hall Ticket</button>
-<div class="footer-text">CIA-II EXAMINATIONS MAR 2026</div>
-</div>
+    td {    
+        padding: 6px 5px;    
+        font-size: 11px;    
+        text-align: center;    
+        line-height: 1.2;    
+    }    
 
-<div class="hall-ticket" id="ticketBox">
+    /* INSTRUCTIONS – ULTRA COMPACT */    
+    .instructions {    
+        padding: 8px;    
+        font-size: 10.5px;    
+        line-height: 1.3;    
+    }    
 
-<div class="ticket-header">
-<img src="https://i.postimg.cc/t4SNTBXV/only-KPR-Color.png" class="ticket-logo">
-<div class="ticket-header-text">
-<h1>KPR College of Arts Science and Research</h1>
-<h2>Avinashi road, Arasur, Coimbatore.</h2>
-<h2>CIA-II Examinations – March 2026</h2>
-<span class="hall-ticket-label">HALL TICKET</span>
-</div>
-</div>
+    .instructions strong {    
+        font-size: 11px;    
+        margin-bottom: 6px;    
+    }    
 
-<div class="student-info">
-<div class="info-row"><span class="label">Name:</span> <span class="value" id="name"></span></div>
-<div class="info-row"><span class="label">Register No:</span> <span class="value" id="reg"></span></div>
-<div class="info-row"><span class="label">Degree:</span> <span class="value" id="course"></span></div>
-<div class="info-row"><span class="label">Department:</span> <span class="value" id="dept"></span></div>
-<div class="info-row"><span class="label">Year:</span> <span class="value" id="yearsem"></span></div>
-</div>
+    .instructions li {    
+        margin-bottom: 4px;    
+    }    
 
-<div class="table-wrapper">
-<table>
-<thead>
-<tr>
-<th>Date</th>
-<th>Session</th>
-<th>Subject Code</th>
-<th>Subject Name</th>
-<th>Venue</th>
-</tr>
-</thead>
-<tbody id="tbody"></tbody>
-</table>
-</div>
+    /* REMOVE NON-ESSENTIAL UI */    
+    .print-actions,    
+    .print-hint {    
+        display: none;    
+    }    
 
-<div class="exam-timing">
-<div><strong>Duration:</strong> 2 Hours</div>
-<div><strong>FN:</strong> 09:30–11:30 | <strong>AN:</strong> 02:00–04:00</div>
-</div>
+    .exam-timing {
 
-<div class="instructions">
-<strong>📋 Instructions</strong>
-<ul>
-<li>Carry College ID Card.</li>
-<li>Be seated 15 minutes before exam.</li>
-<li>No mobile phones allowed.</li>
-</ul>
-</div>
-
-<div class="print-actions">
-<button class="print-btn" onclick="window.print()">Download / Print</button>
-</div>
-
-</div>
-
-<script>
-const SHEET_URL="YOUR_CSV_LINK";
-
-const dataMap=new Map();
-
-const els={
-loader:document.getElementById("loader-overlay"),
-regInput:document.getElementById("regno"),
-btn:document.getElementById("btn"),
-ticketBox:document.getElementById("ticketBox"),
-name:document.getElementById("name"),
-reg:document.getElementById("reg"),
-dept:document.getElementById("dept"),
-yearsem:document.getElementById("yearsem"),
-course:document.getElementById("course"),
-tbody:document.getElementById("tbody")
-};
-
-/* 🇮🇳 INDIAN DATE FORMAT */
-function formatDate(d){
-const date=new Date(d);
-if(isNaN(date))return d;
-return date.toLocaleDateString("en-IN");
+font-size: 11px;
+padding: 8px;
+margin-bottom: 10px;
 }
 
-fetch(SHEET_URL)
-.then(r=>r.text())
-.then(csv=>{
-const rows=csv.split(/\r?\n/).slice(1);
-rows.forEach(row=>{
-const cols=row.split(",").map(c=>c.replace(/"/g,"").trim());
-const regNo=cols[2]?.toUpperCase();
-if(!regNo)return;
+}
 
-if(!dataMap.has(regNo)){
-dataMap.set(regNo,{
-student:{
-name:cols[1],
-reg:regNo,
-dept:cols[8],
-course:cols[7],
-yearsem:cols[5]
-},
-subjects:[]
+/* ================= PRINT ================= */    
+@media print {    
+    @page {    
+        size: A4;    
+        margin: 10mm;    
+    }    
+
+    body {    
+        background: #fff;    
+        padding: 0;    
+    }    
+
+    .search-container,    
+    .print-actions,    
+    #loader-overlay {    
+        display: none !important;    
+    }    
+
+    .hall-ticket {    
+        display: block !important;    
+        box-shadow: none;    
+        border: none;    
+        transform: none !important;    
+        width: 100%;    
+        height: auto;    
+    }    
+}
+
+</style>  </head>    
+<body>  <div id="loader-overlay">    
+    <div class="spinner"></div>    
+    <p style="font-weight: 500; color: #4b5563; margin-top: 8px;">Loading Database...</p>    
+</div>  <div class="search-container" id="searchBox">    
+    <img src="https://i.postimg.cc/t4SNTBXV/only-KPR-Color.png" class="logo-img" alt="Logo">    
+    <div class="instruction-text">Enter Your Register Number to View Hall Ticket</div>  <input type="text" id="regno" class="input-box" placeholder="e.g., 2328c0043" disabled>    
+<button class="view-btn" id="btn" onclick="searchHT()" disabled>View Hall Ticket</button>    
+<div class="footer-text">CIA-II EXAMINATIONS MAR 2026</div>  </div>  <div class="hall-ticket" id="ticketBox">    
+    <div class="ticket-header">    
+        <img src="https://i.postimg.cc/t4SNTBXV/only-KPR-Color.png" class="ticket-logo" alt="Logo">  <div class="ticket-header-text">    
+        <h1>KPR College of Arts Science and Research</h1>    
+        <h2>Avinashi road, Arasur, Coimbatore.</h2>    
+        <h2>CIA-II Examinations – March 2026</h2>    
+        <span class="hall-ticket-label">HALL TICKET</span>    
+    </div>    
+</div>    <div class="student-info">    
+    <div class="info-row"><span class="label">Name: </span><span class="value" id="name"></span></div>    
+    <div class="info-row"><span class="label">Register No: </span><span class="value" id="reg"></span></div>    
+    <div class="info-row"><span class="label">Degree: </span><span class="value" id="course"></span></div>    
+    <div class="info-row"><span class="label">Department: </span><span class="value" id="dept"></span></div>    
+    <div class="info-row"><span class="label">Year: </span><span class="value" id="yearsem"></span></div>    
+</div>    <div class="table-wrapper">    
+    <table>    
+        <thead>    
+        <tr>    
+            <th>Date</th>    
+            <th>Session</th>    
+            <th>Subject Code</th>    
+            <th>Subject Name</th>    
+            <th>Venue</th>    
+        </tr>    
+        </thead>    
+        <tbody id="tbody"></tbody>    
+    </table>    
+</div>    <!-- ================= EXAM TIMING ================= -->  <div class="exam-timing">    
+  <div><strong>Duration of Examination:</strong> 2 Hours</div>    
+  <div>    
+    <strong>Exam Timing:</strong>    
+    <span class="timing">    
+      FN: 09:30 a.m. – 11:30 a.m. |    
+      AN: 02:00 p.m. – 04:00 p.m.    
+    </span>    
+  </div>    
+</div>  <div class="instructions">    
+    <strong>📋 Instructions</strong>    
+    <ul>    
+        <li>Students must carry their College ID Card for every exam.</li>    
+        <li>Students must sit only in the halls mentioned in the Hall Ticket.</li>    
+        <li>Students must occupy their allotted seats at least 15 minutes before the commencement of the examination.</li>    
+        <li>Late entry will not be allowed.</li>    
+        <li>Mobile phones, smartwatches, and any electronic gadgets are strictly prohibited inside the hall.</li>    
+    </ul>    
+</div>    <div class="print-actions">    
+    <button class="print-btn" onclick="window.print()">Download PDF / Print</button>    
+</div>  </div>  <script>    
+    const SHEET_URL =    
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8z0Dhqtq2iSoLquNuaEwh5cdEW6XMeYv62nDly7qAr91XrZjxxz2AvEv-540ILsImaGOrBe-XE8JY/pub?output=csv";    const dataMap = new Map();    
+
+const els = {    
+    loader: document.getElementById("loader-overlay"),    
+    regInput: document.getElementById("regno"),    
+    btn: document.getElementById("btn"),    
+    ticketBox: document.getElementById("ticketBox"),    
+    name: document.getElementById("name"),    
+    reg: document.getElementById("reg"),    
+    dept: document.getElementById("dept"),    
+    yearsem: document.getElementById("yearsem"),    
+    course: document.getElementById("course"),    
+    tbody: document.getElementById("tbody")    
+};    
+
+fetch(SHEET_URL)    
+    .then(res => res.text())    
+    .then(csv => {    
+        const rows = csv.split(/\r?\n/).slice(1);    
+
+        rows.forEach(row => {    
+            const cols = row.split(",").map(c =>    
+                c.replace(/"/g, "").trim()    
+            );    
+
+            const regNo = cols[2]?.toUpperCase();    
+            if (!regNo) return;    
+
+            if (!dataMap.has(regNo)) {    
+                dataMap.set(regNo, {    
+                    student: {    
+                        name: cols[1],    
+                        reg: regNo,    
+                        dept: cols[8],    
+                        course: cols[7],    
+                        yearsem: cols[5]    
+                    },    
+                    subjects: []    
+                });    
+            }    
+
+            // Push ONE SUBJECT per row    
+            if (cols[13] && cols[15]) {    
+                dataMap.get(regNo).subjects.push({    
+                    date: cols[16],    
+                    session: cols[17],    
+                    code: cols[13],    
+                    title: cols[15],    
+                    hall: cols[18]    
+                });    
+            }    
+        });    
+
+        els.loader.style.display = "none";    
+        els.regInput.disabled = false;    
+        els.btn.disabled = false;    
+    })    
+    .catch(() => {    
+        els.loader.innerHTML =    
+            "<p style='color:#dc2626;font-weight:600'>Failed to load data</p>";    
+    });    
+
+function searchHT() {    
+    const regNo = els.regInput.value.trim().toUpperCase();    
+
+    if (!regNo) {    
+        alert("Please enter Register Number");    
+        return;    
+    }    
+
+    if (!dataMap.has(regNo)) {    
+        alert("Register Number Not Found");    
+        return;    
+    }    
+
+    const data = dataMap.get(regNo);    
+
+    els.name.innerText = data.student.name;    
+    els.reg.innerText = data.student.reg;    
+    els.dept.innerText = data.student.dept;    
+    els.course.innerText = data.student.course;    
+    els.yearsem.innerText = data.student.yearsem;    
+
+    els.tbody.innerHTML = "";    
+
+    data.subjects.forEach(sub => {    
+        els.tbody.innerHTML += `    
+  <tr>    
+    <td class="text-center">${sub.date}</td>    
+    <td class="text-center">${sub.session}</td>    
+    <td class="text-center font-bold">${sub.code}</td>    
+    <td>${sub.title}</td>    
+    <td class="text-center">${sub.hall}</td>    
+  </tr>    
+`;    
+    });    
+
+    document.getElementById("searchBox").style.display = "none";    
+    els.ticketBox.style.display = "block";    
+}
+
+</script>  <script>
+// Disable right click
+document.addEventListener('contextmenu', function (e) {
+e.preventDefault();
 });
-}
 
-if(cols[11]&&cols[13]){
-dataMap.get(regNo).subjects.push({
-date:formatDate(cols[14]),
-session:cols[15],
-code:cols[11],
-title:cols[13],
-hall:cols[17]
-});
-}
-});
+// Disable inspect & devtools shortcuts    
+document.addEventListener('keydown', function (e) {    
+    // F12    
+    if (e.keyCode === 123) {    
+        e.preventDefault();    
+    }    
 
-els.loader.style.display="none";
-els.regInput.disabled=false;
-els.btn.disabled=false;
-});
+    // Ctrl + Shift + I / J / C    
+    if (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) {    
+        e.preventDefault();    
+    }    
 
-function searchHT(){
-const regNo=els.regInput.value.trim().toUpperCase();
-if(!regNo)return alert("Enter Register Number");
-if(!dataMap.has(regNo))return alert("Register Number Not Found");
-
-const data=dataMap.get(regNo);
-
-els.name.innerText=data.student.name;
-els.reg.innerText=data.student.reg;
-els.dept.innerText=data.student.dept;
-els.course.innerText=data.student.course;
-els.yearsem.innerText=data.student.yearsem;
-
-els.tbody.innerHTML="";
-data.subjects.forEach(s=>{
-els.tbody.innerHTML+=`
-<tr>
-<td class="text-center">${s.date}</td>
-<td class="text-center">${s.session}</td>
-<td class="text-center font-bold">${s.code}</td>
-<td>${s.title}</td>
-<td class="text-center">${s.hall}</td>
-</tr>`;
+    // Ctrl + U (View Source)    
+    if (e.ctrlKey && e.keyCode === 85) {    
+        e.preventDefault();    
+    }    
 });
 
-document.getElementById("searchBox").style.display="none";
-els.ticketBox.style.display="block";
-}
+</script>  </body>
 
-els.regInput.addEventListener("keydown",function(e){
-if(e.key==="Enter"){searchHT();}
-});
-</script>
-
-</body>
 </html>
