@@ -82,60 +82,34 @@ border:1px solid var(--border);
 box-shadow:0 25px 50px rgba(0,0,0,.15)
 }
 .ticket-header{
-display:flex;
-align-items:center;
-gap:20px;
+display:flex;align-items:center;gap:20px;
 border-bottom:3px solid var(--blue);
-padding-bottom:16px;
-margin-bottom:24px
+padding-bottom:16px;margin-bottom:24px
 }
 .ticket-logo{width:120px}
 .ticket-header-text h1{font-size:18px;color:var(--blue)}
 .ticket-header-text h2{font-size:14px;color:#555;margin-top:4px}
 .hall-ticket-label{
-display:inline-block;
-margin-top:8px;
-padding:6px 14px;
-background:var(--green);
-color:#fff;
-font-size:13px;
-font-weight:700;
-border-radius:6px
+display:inline-block;margin-top:8px;
+padding:6px 14px;background:var(--green);
+color:#fff;font-size:13px;font-weight:700;border-radius:6px
 }
 
 /* STUDENT INFO */
 .student-info{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:16px;
-border:1px solid var(--border);
-padding:18px;
-margin-bottom:22px;
-background:#f8fafc
+gap:16px;border:1px solid var(--border);
+padding:18px;margin-bottom:22px;background:#f8fafc
 }
 .info-row .label{font-size:11px;color:var(--blue);font-weight:700}
 .info-row .value{font-size:14px;font-weight:600}
 
 /* TABLE */
-.table-wrapper{
-border:2px solid var(--blue);
-margin-bottom:22px;
-overflow:hidden
-}
-table{
-width:100%;
-border-collapse:collapse;
-font-size:12.5px
-}
-th{
-background:var(--blue);
-color:#fff;
-padding:10px
-}
-td{
-padding:10px;
-border:1px solid var(--border)
-}
+.table-wrapper{border:2px solid var(--blue);margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--blue);color:#fff;padding:10px}
+td{padding:10px;border:1px solid var(--border)}
 tbody tr:nth-child(even){background:#f9fafb}
 .text-center{text-align:center}
 .font-bold{font-weight:700}
@@ -143,84 +117,54 @@ tbody tr:nth-child(even){background:#f9fafb}
 /* EXAM TIMING */
 .exam-timing{
 border:1px solid var(--border);
-background:#f8fafc;
-padding:12px;
-margin-bottom:18px;
-font-size:13px;
-text-align:center;
-line-height:1.6
+background:#f8fafc;padding:12px;
+margin-bottom:18px;font-size:13px;text-align:center
 }
 .exam-timing strong{color:var(--blue)}
 
 /* INSTRUCTIONS */
 .instructions{
 border:1px solid var(--border);
-padding:16px;
-font-size:13px;
-background:#fff
+padding:16px;font-size:13px;background:#fff
 }
-.instructions strong{
-display:block;
-margin-bottom:10px;
-color:var(--blue)
-}
+.instructions strong{display:block;margin-bottom:10px;color:var(--blue)}
 .instructions ul{padding-left:18px}
 .instructions li{margin-bottom:8px}
 
-/* PRINT BUTTON */
 .print-actions{text-align:center;margin-top:20px}
 .print-btn{
-padding:14px 40px;
-background:var(--blue);
-color:#fff;
-border:none;
-border-radius:40px;
-font-weight:600;
-cursor:pointer
+padding:14px 40px;background:var(--blue);
+color:#fff;border:none;border-radius:40px;
+font-weight:600;cursor:pointer
 }
 
-/* MOBILE OPTIMIZATION */
+/* MOBILE */
 @media (max-width:600px){
 
 html,body{height:100vh;overflow:hidden;background:#eef2f7}
 
-.search-container{
-margin:40px 10px;
-padding:20px;
-border-radius:14px
-}
+.search-container{margin:40px 10px;padding:20px}
 
 .hall-ticket{
-width:100%;
-height:100vh;
-margin:0;
-padding:12px;
-border-radius:16px;
-box-shadow:none;
-overflow:hidden
+width:100%;height:100vh;margin:0;
+padding:12px;border-radius:16px;
+box-shadow:none;overflow:hidden
 }
 
 .ticket-header{
-display:grid;
-grid-template-columns:55px 1fr;
-gap:10px;
-padding-bottom:8px;
-margin-bottom:10px
+display:grid;grid-template-columns:55px 1fr;
+gap:10px;padding-bottom:8px;margin-bottom:10px
 }
-
 .ticket-logo{width:55px}
-
-.ticket-header-text h1{font-size:13px;line-height:1.3}
-.ticket-header-text h2{font-size:10px;margin-top:2px}
+.ticket-header-text h1{font-size:13px}
+.ticket-header-text h2{font-size:10px}
 .hall-ticket-label{font-size:9px;padding:3px 8px}
 
 .student-info{
 grid-template-columns:repeat(2,1fr);
-gap:8px;
-padding:8px;
-margin-bottom:10px
+gap:8px;padding:8px;margin-bottom:10px
 }
-.info-row .label{font-size:8.5px}
+.info-row .label{font-size:8px}
 .info-row .value{font-size:11px}
 
 table{font-size:10px}
@@ -251,8 +195,8 @@ td{padding:5px;font-size:10px}
 
 <div class="search-container" id="searchBox">
 <img src="https://i.postimg.cc/t4SNTBXV/only-KPR-Color.png" class="logo-img">
-<div class="instruction-text">Enter Your Register Number to View Hall Ticket</div>
-<input type="text" id="regno" class="input-box" placeholder="e.g., 2328C0043" disabled>
+<div class="instruction-text">Enter Your Register Number</div>
+<input type="text" id="regno" class="input-box" disabled>
 <button class="view-btn" id="btn" onclick="searchHT()" disabled>View Hall Ticket</button>
 <div class="footer-text">CIA-II EXAMINATIONS MAR 2026</div>
 </div>
@@ -293,7 +237,7 @@ td{padding:5px;font-size:10px}
 </div>
 
 <div class="exam-timing">
-<div><strong>Duration of Examination:</strong> 2 Hours</div>
+<div><strong>Duration:</strong> 2 Hours</div>
 <div><strong>FN:</strong> 09:30–11:30 | <strong>AN:</strong> 02:00–04:00</div>
 </div>
 
@@ -307,13 +251,13 @@ td{padding:5px;font-size:10px}
 </div>
 
 <div class="print-actions">
-<button class="print-btn" onclick="window.print()">Download PDF / Print</button>
+<button class="print-btn" onclick="window.print()">Download / Print</button>
 </div>
 
 </div>
 
 <script>
-const SHEET_URL="YOUR_GOOGLE_SHEET_CSV_LINK";
+const SHEET_URL="YOUR_CSV_LINK";
 
 const dataMap=new Map();
 
@@ -330,10 +274,11 @@ course:document.getElementById("course"),
 tbody:document.getElementById("tbody")
 };
 
+/* 🇮🇳 INDIAN DATE FORMAT */
 function formatDate(d){
 const date=new Date(d);
 if(isNaN(date))return d;
-return date.toLocaleDateString("en-GB",{day:"2-digit",month:"2-digit",year:"numeric"});
+return date.toLocaleDateString("en-IN");
 }
 
 fetch(SHEET_URL)
@@ -342,7 +287,6 @@ fetch(SHEET_URL)
 const rows=csv.split(/\r?\n/).slice(1);
 rows.forEach(row=>{
 const cols=row.split(",").map(c=>c.replace(/"/g,"").trim());
-
 const regNo=cols[2]?.toUpperCase();
 if(!regNo)return;
 
