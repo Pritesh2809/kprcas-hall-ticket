@@ -464,16 +464,21 @@ margin-bottom: 10px;
         </thead>    
         <tbody id="tbody"></tbody>    
     </table>    
-</div>    <!-- ================= EXAM TIMING ================= -->  <div class="exam-timing">    
-  <div><strong>Duration of Examination:</strong> 3 Hours</div>    
-  <div>    
-    <strong>Exam Timing:</strong>    
-    <span class="timing">    
-      FN: 10:00 a.m. – 01:00 p.m. |
-      AN: 02:00 p.m. – 05:00 p.m.    
-    </span>    
-  </div>    
-</div>  <div class="instructions">    
+</div>    <!-- ================= EXAM TIMING ================= -->  
+    
+<div class="exam-timing">
+  <div>
+    <strong>Duration of Examination:</strong>
+    <span id="examDuration">Loading...</span>
+  </div>
+
+  <div>
+    <strong>Exam Timing:</strong>
+    <span class="timing" id="examTiming">Loading...</span>
+  </div>
+</div>
+    
+    <div class="instructions">    
     <strong>📋 Instructions</strong>    
     <ul>    
         <li>Students must carry their College ID Card for every exam.</li>    
@@ -509,15 +514,23 @@ const els = {
 fetch(EXAM_NAME_URL)
     .then(res => res.text())
     .then(csv => {
-        const examName = csv.split(/\r?\n/)[0]
-            .replace(/"/g, "")
-            .trim();
+
+        const rows = csv
+            .split(/\r?\n/)
+            .map(r => r.replace(/"/g, "").trim());
+
+        const examName = rows[0] || "";
+        const duration = rows[1] || "";
+        const timing = rows[2] || "";
 
         document.getElementById("examNameHeader").innerText = examName;
         document.getElementById("examNameFooter").innerText = examName;
+
+        document.getElementById("examDuration").innerText = duration;
+        document.getElementById("examTiming").innerText = timing;
     })
     .catch(err => {
-        console.error("Exam name load error", err);
+        console.error("Exam details load error", err);
     });
 
     
