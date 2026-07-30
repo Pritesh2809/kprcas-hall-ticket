@@ -528,19 +528,17 @@ fetch(SHEET_URL)
             }    
 
             
-            // Push ONE SUBJECT per row    
-            if (cols[17] && cols[18]) {    
-dataMap.get(regNo).subjects.push({
-    date: cols[18],      // DATE
-    session: cols[19],   // SESS
-    code: cols[16],      // Subject Code
-    title: cols[17],     // SUB_TITLE
-    seat: cols[20],      // SEAT NO
-    hall: cols[21]       // HALL NO
-}); 
+if (cols[11] && cols[13]) {
 
-                
-            }    
+dataMap.get(regNo).subjects.push({
+    date: cols[14],      // O
+    session: cols[15],   // P
+    code: cols[11],      // L
+    title: cols[13],     // N
+    seat: cols[16],      // Q
+    hall: cols[17]       // R
+});
+}
         });    
         
 
