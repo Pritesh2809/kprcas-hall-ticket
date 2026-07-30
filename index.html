@@ -436,12 +436,12 @@ margin-bottom: 10px;
     <img src="https://i.postimg.cc/t4SNTBXV/only-KPR-Color.png" class="logo-img" alt="Logo">    
     <div class="instruction-text">Enter Your Register Number to View Hall Ticket</div>  <input type="text" id="regno" class="input-box" placeholder="e.g., 2328c0043" disabled>    
 <button class="view-btn" id="btn" onclick="searchHT()" disabled>View Hall Ticket</button>    
-<div class="footer-text">CIA I EXAMINATIONS AUG 2026</div>  </div>  <div class="hall-ticket" id="ticketBox">    
+<div class="footer-text" id="examNameFooter">Loading...</div>  </div>  <div class="hall-ticket" id="ticketBox">    
     <div class="ticket-header">    
         <img src="https://i.postimg.cc/t4SNTBXV/only-KPR-Color.png" class="ticket-logo" alt="Logo">  <div class="ticket-header-text">    
         <h1>KPR College of Arts Science and Research</h1>    
         <h2>Avinashi road, Arasur, Coimbatore.</h2>    
-        <h2>CIA I EXAMINATIONS AUG 2026</h2>    
+        <h2 id="examNameHeader">Loading...</h2>   
         <span class="hall-ticket-label">HALL TICKET</span>    
     </div>    
 </div>    <div class="student-info">    
@@ -485,9 +485,14 @@ margin-bottom: 10px;
 </div>    <div class="print-actions">    
     <button class="print-btn" onclick="window.print()">Download PDF / Print</button>    
 </div>  </div>  <script>    
+    
     const SHEET_URL =    
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8z0Dhqtq2iSoLquNuaEwh5cdEW6XMeYv62nDly7qAr91XrZjxxz2AvEv-540ILsImaGOrBe-XE8JY/pub?output=csv";    const dataMap = new Map();    
 
+
+    const EXAM_NAME_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vT8z0Dhqtq2iSoLquNuaEwh5cdEW6XMeYv62nDly7qAr91XrZjxxz2AvEv-540ILsImaGOrBe-XE8JY/pub?gid=663781797&single=true&output=csv";
+    
 const els = {    
     loader: document.getElementById("loader-overlay"),    
     regInput: document.getElementById("regno"),    
@@ -501,6 +506,21 @@ const els = {
     tbody: document.getElementById("tbody")    
 };    
 
+fetch(EXAM_NAME_URL)
+    .then(res => res.text())
+    .then(csv => {
+        const examName = csv.split(/\r?\n/)[0]
+            .replace(/"/g, "")
+            .trim();
+
+        document.getElementById("examNameHeader").innerText = examName;
+        document.getElementById("examNameFooter").innerText = examName;
+    })
+    .catch(err => {
+        console.error("Exam name load error", err);
+    });
+
+    
 fetch(SHEET_URL)    
     .then(res => res.text())    
     .then(csv => {    
