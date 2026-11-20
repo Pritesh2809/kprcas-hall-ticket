@@ -522,17 +522,55 @@ fetch(EXAM_NAME_URL)
         const examName = rows[0] || "";
         const duration = rows[1] || "";
         const timing = rows[2] || "";
+        const visibility = (rows[3] || "").toUpperCase();
 
         document.getElementById("examNameHeader").innerText = examName;
         document.getElementById("examNameFooter").innerText = examName;
 
         document.getElementById("examDuration").innerText = duration;
         document.getElementById("examTiming").innerText = timing;
+
+        if (visibility === "HIDE") {
+            document.body.innerHTML = `
+                <div style="
+                    min-height:100vh;
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    padding:25px;
+                    background:#f3f6fa;
+                    font-family:Roboto,sans-serif;
+                    text-align:center;
+                ">
+                    <div style="
+                        max-width:420px;
+                        background:white;
+                        padding:35px 25px;
+                        border-radius:16px;
+                        box-shadow:0 8px 30px rgba(0,0,0,.08);
+                    ">
+                        <div style="font-size:45px;">🎓</div>
+                        <h2 style="color:#1a427e;margin:15px 0;">
+                            University Examination Update
+                        </h2>
+                        <p style="color:#4b5563;line-height:1.7;">
+                            University exam venues are always surprising!
+                        </p>
+                        <p style="color:#6b7280;margin-top:12px;font-size:14px;">
+                            Hall tickets are currently unavailable.
+                            Please check back later for updates.
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            return;
+        }
+
     })
     .catch(err => {
         console.error("Exam details load error", err);
     });
-
     
 fetch(SHEET_URL)    
     .then(res => res.text())    
